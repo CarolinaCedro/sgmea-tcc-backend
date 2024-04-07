@@ -1,0 +1,46 @@
+package tcc.sgmeabackend.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import lombok.Getter;
+import tcc.sgmeabackend.model.dtos.ClienteDTO;
+import tcc.sgmeabackend.model.enums.Perfil;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Getter
+@Entity
+public class Responsavel extends Pessoa {
+	private static final long serialVersionUID = 1L;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "responsavel")
+	private List<Chamado> chamados = new ArrayList<>();
+
+	public Responsavel() {
+		super();
+		addPerfil(Perfil.CLIENTE);
+	}
+
+	public Responsavel(Integer id, String nome, String cpf, String email, String senha) {
+		super(id, nome, cpf, email, senha);
+		addPerfil(Perfil.CLIENTE);
+	}
+
+	public Responsavel(ClienteDTO obj) {
+		super();
+		this.id = obj.getId();
+		this.nome = obj.getNome();
+		this.cpf = obj.getCpf();
+		this.email = obj.getEmail();
+		this.senha = obj.getSenha();
+		this.perfis = obj.getPerfis().stream().map(x -> x.getCodigo()).collect(Collectors.toSet());
+		this.dataCriacao = obj.getDataCriacao();
+	}
+
+
+
+}
