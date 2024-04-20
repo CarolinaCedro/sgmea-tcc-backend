@@ -18,9 +18,9 @@ public class Funcionario extends Pessoa {
     private static final long serialVersionUID = 1L;
 
 
-    @Id
-    @UuidGenerator
-    private String id;
+//    @Id
+//    @UuidGenerator
+//    private String id;
 
 
     @JsonIgnore

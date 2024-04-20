@@ -21,9 +21,9 @@ import java.util.stream.Collectors;
 public class Tecnico extends Pessoa {
 
 
-    @Id
-    @UuidGenerator
-    private String id;
+//    @Id
+//    @UuidGenerator
+//    private String id;
 
     private static final long serialVersionUID = 1L;
 

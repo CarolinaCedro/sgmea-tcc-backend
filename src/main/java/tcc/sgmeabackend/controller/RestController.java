@@ -1,10 +1,8 @@
 package tcc.sgmeabackend.controller;
 
 
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
-import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 
