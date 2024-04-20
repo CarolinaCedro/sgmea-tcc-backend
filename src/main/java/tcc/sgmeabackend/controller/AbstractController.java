@@ -1,5 +1,6 @@
 package tcc.sgmeabackend.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tcc.sgmeabackend.service.AbstractService;
@@ -34,13 +35,13 @@ public abstract class AbstractController<T> implements RestController<T> {
 
     @Override
     @PostMapping
-    public ResponseEntity<T> create(T resource) {
+    public ResponseEntity<T> create(@Valid @RequestBody T resource) {
         return ResponseEntity.ok(this.getService().create(resource));
     }
 
     @Override
     @PutMapping("/{id}")
-    public ResponseEntity<T> update(@PathVariable String id, T resource) {
+    public ResponseEntity<T> update(@PathVariable String id, @Valid @RequestBody T resource) {
         return ResponseEntity.ok(this.getService().create(resource));
     }
 
