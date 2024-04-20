@@ -1,6 +1,7 @@
 package tcc.sgmeabackend.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import tcc.sgmeabackend.service.AbstractService;
 
 import java.util.List;
@@ -13,12 +14,14 @@ public abstract class AbstractController<T> implements RestController<T> {
 
 
     @Override
+    @GetMapping
     public ResponseEntity<List<T>> findAll() {
         return ResponseEntity.ok(this.getService().findAll());
     }
 
     @Override
-    public ResponseEntity<Optional<T>> findById(String id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<T>> findById(@PathVariable String id) {
 
         Optional<T> result = this.getService().findById(id);
 
@@ -30,17 +33,20 @@ public abstract class AbstractController<T> implements RestController<T> {
     }
 
     @Override
+    @PostMapping
     public ResponseEntity<T> create(T resource) {
         return ResponseEntity.ok(this.getService().create(resource));
     }
 
     @Override
-    public ResponseEntity<T> update(String id, T resource) {
+    @PutMapping("/{id}")
+    public ResponseEntity<T> update(@PathVariable String id, T resource) {
         return ResponseEntity.ok(this.getService().create(resource));
     }
 
     @Override
-    public void delete(String id) {
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable String id) {
         this.getService().delete(id);
     }
 
