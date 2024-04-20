@@ -3,24 +3,31 @@ package tcc.sgmeabackend.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.UuidGenerator;
 import tcc.sgmeabackend.model.enums.Prioridade;
 import tcc.sgmeabackend.model.enums.Status;
 
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-@Entity
+
 @Data
+@Entity
 public class Chamado implements Serializable {
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	@UuidGenerator
+	private String id;
+
 
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dataAbertura = LocalDate.now();
+
+
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dataFechamento;
 
@@ -30,28 +37,28 @@ public class Chamado implements Serializable {
 	private String observacoes;
 
 	@ManyToOne
-	@JoinColumn(name = "tecnico_id")
 	private Tecnico tecnico;
 
 	@ManyToOne
-	@JoinColumn(name = "responsavel_id")
-	private Responsavel responsavel;
+	private Funcionario funcionario;
 
 	public Chamado() {
 		super();
 	}
 
-	public Chamado(Integer id, Prioridade prioridade, Status status, String titulo, String observacoes, Tecnico tecnico,
-			Responsavel responsavel) {
-		this.id = id;
+	public Chamado(String id, Prioridade prioridade, Status status, String titulo, String observacoes, Tecnico tecnico,
+			Funcionario funcionario) {
 		this.prioridade = prioridade;
 		this.status = status;
 		this.titulo = titulo;
 		this.observacoes = observacoes;
 		this.tecnico = tecnico;
-		this.responsavel = responsavel;
+		this.funcionario = funcionario;
 	}
 
 
 
 }
+
+
+

@@ -12,15 +12,15 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Entity
-@Data
 
+@Data
 public abstract class Pessoa implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected Integer id;
+	protected String id;
+
 	protected String nome;
 	
 	@Column(unique = true)
@@ -42,7 +42,7 @@ public abstract class Pessoa implements Serializable {
 		addPerfil(Perfil.CLIENTE);
 	}
 
-	public Pessoa(Integer id, String nome, String cpf, String email, String senha) {
+	public Pessoa(String id, String nome, String cpf, String email, String senha) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -54,7 +54,7 @@ public abstract class Pessoa implements Serializable {
 
 
 	public Set<Perfil> getPerfis() {
-		return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
+		return perfis.stream().map(Perfil::toEnum).collect(Collectors.toSet());
 	}
 
 	public void addPerfil(Perfil perfil) {
