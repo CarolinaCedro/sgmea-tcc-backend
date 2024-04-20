@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.validator.constraints.br.CPF;
-import tcc.sgmeabackend.model.Responsavel;
+import tcc.sgmeabackend.model.Funcionario;
 import tcc.sgmeabackend.model.enums.Perfil;
 
 import java.io.Serializable;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class ClienteDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	protected Integer id;
+	protected String id;
 	@NotNull(message = "O campo NOME é requerido")
 	protected String nome;
 	@NotNull(message = "O campo CPF é requerido")
@@ -37,7 +37,7 @@ public class ClienteDTO implements Serializable {
 		addPerfil(Perfil.CLIENTE);
 	}
 
-	public ClienteDTO(Responsavel obj) {
+	public ClienteDTO(Funcionario obj) {
 		super();
 		this.id = obj.getId();
 		this.nome = obj.getNome();

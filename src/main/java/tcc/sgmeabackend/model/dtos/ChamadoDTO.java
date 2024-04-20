@@ -12,7 +12,7 @@ import java.time.LocalDate;
 public class ChamadoDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private Integer id;
+	private String id;
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dataAbertura = LocalDate.now();
 	@JsonFormat(pattern = "dd/MM/yyyy")
@@ -26,9 +26,9 @@ public class ChamadoDTO implements Serializable {
 	@NotNull(message = "O campo OBSERVAÇÕES é requerido")
 	private String observacoes;
 	@NotNull(message = "O campo TECNICO é requerido")
-	private Integer tecnico;
+	private String tecnico;
 	@NotNull(message = "O campo CLIENTE é requerido")
-	private Integer cliente;
+	private String cliente;
 	private String nomeTecnico;
 	private String nomeCliente;
 
@@ -45,8 +45,8 @@ public class ChamadoDTO implements Serializable {
 		this.titulo = obj.getTitulo();
 		this.observacoes = obj.getObservacoes();
 		this.tecnico = obj.getTecnico().getId();
-		this.cliente = obj.getCliente().getId();
-		this.nomeCliente = obj.getCliente().getNome();
+//		this.cliente = obj.getCliente().getId();
+//		this.nomeCliente = obj.getCliente().getNome();
 		this.nomeTecnico = obj.getTecnico().getNome();
 	}
 

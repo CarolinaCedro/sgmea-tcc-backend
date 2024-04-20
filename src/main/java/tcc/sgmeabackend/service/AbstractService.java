@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public abstract class AbstractService<T> implements Rest<T> {
 
-    abstract JpaRepository<T, String> getRepository();
+    protected abstract JpaRepository<T, String> getRepository();
 
 
     @Override
@@ -18,9 +18,8 @@ public abstract class AbstractService<T> implements Rest<T> {
     }
 
     @Override
-    public T findById(String id) {
-        Optional<T> optionalResource = getRepository().findById(id);
-        return optionalResource.orElse(null);
+    public Optional<T> findById(String id) {
+        return this.getRepository().findById(id);
     }
 
     @Override
