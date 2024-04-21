@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.validator.constraints.br.CPF;
 import tcc.sgmeabackend.model.Tecnico;
-import tcc.sgmeabackend.model.enums.Perfil;
+import tcc.sgmeabackend.model.enums.UserRole;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -34,7 +34,7 @@ public class TecnicoDTO implements Serializable {
 
 	public TecnicoDTO() {
 		super();
-		addPerfil(Perfil.CLIENTE);
+		addPerfil(UserRole.FUNCIONARIO);
 	}
 
 	public TecnicoDTO(Tecnico obj) {
@@ -44,18 +44,17 @@ public class TecnicoDTO implements Serializable {
 		this.cpf = obj.getCpf();
 		this.email = obj.getEmail();
 		this.senha = obj.getSenha();
-		this.perfis = obj.getPerfis().stream().map(x -> x.getCodigo()).collect(Collectors.toSet());
 		this.dataCriacao = obj.getDataCriacao();
-		addPerfil(Perfil.CLIENTE);
+		addPerfil(UserRole.FUNCIONARIO);
 	}
 
 
-	public Set<Perfil> getPerfis() {
-		return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
+	public Set<UserRole> getPerfis() {
+		return perfis.stream().map(x -> UserRole.toEnum(x)).collect(Collectors.toSet());
 	}
 
-	public void addPerfil(Perfil perfil) {
-		this.perfis.add(perfil.getCodigo());
+	public void addPerfil(UserRole userRole) {
+		this.perfis.add(userRole.getCodigo());
 	}
 
 

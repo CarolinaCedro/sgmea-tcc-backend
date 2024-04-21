@@ -1,68 +1,123 @@
 package tcc.sgmeabackend.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
-import tcc.sgmeabackend.model.enums.Perfil;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import tcc.sgmeabackend.model.enums.UserRole;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.List;
 
 
 @Data
 @Entity
-public abstract class Pessoa implements Serializable {
-	private static final long serialVersionUID = 1L;
-	
-	@Id
-	@UuidGenerator
-	protected String id;
+public class Pessoa implements Serializable, UserDetails {
 
-	protected String nome;
-	
-	@Column(unique = true)
-	protected String cpf;
-	
-	@Column(unique = true)
-	protected String email;
-	protected String senha;
-	
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "PERFIS")
-	protected Set<Integer> perfis = new HashSet<>();
-	
-	@JsonFormat(pattern = "dd/MM/yyyy")
-	protected LocalDate dataCriacao = LocalDate.now();
+    private static final long serialVersionUID = 1L;
 
-	public Pessoa() {
-		super();
-		addPerfil(Perfil.CLIENTE);
-	}
+    @Id
+    @UuidGenerator
+    protected String id;
 
-	public Pessoa(String id, String nome, String cpf, String email, String senha) {
-		super();
-		this.id = id;
-		this.nome = nome;
-		this.cpf = cpf;
-		this.email = email;
-		this.senha = senha;
-		addPerfil(Perfil.CLIENTE);
-	}
+    protected String nome;
+
+    @Column(unique = true)
+    protected String cpf;
+
+    @Column(unique = true)
+    protected String email;
+    protected String senha;
 
 
-	public Set<Perfil> getPerfis() {
-		return perfis.stream().map(Perfil::toEnum).collect(Collectors.toSet());
-	}
-
-	public void addPerfil(Perfil perfil) {
-		this.perfis.add(perfil.getCodigo());
-	}
+    private UserRole role;
 
 
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    protected LocalDate dataCriacao = LocalDate.now();
 
+    public Pessoa() {
+        super();
+    }
+
+    public Pessoa(String id, String nome, String cpf, String email, String senha) {
+        super();
+        this.id = id;
+        this.nome = nome;
+        this.cpf = cpf;
+        this.email = email;
+        this.senha = senha;
+    }
+
+    public Pessoa(String nome, String encryptedPassword, UserRole role) {
+        this.nome = nome;
+        this.senha = encryptedPassword;
+        this.role = role;
+    }
+
+
+    //Autenticação
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (this.role == UserRole.ADMIN) {
+            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"),
+                    new SimpleGrantedAuthority("ROLE_GESTOR"),
+                    new SimpleGrantedAuthority("ROLE_FUNCIONARIO"),
+                    new SimpleGrantedAuthority("ROLE_TECNICO")
+
+            );
+        }
+
+        if (this.role == UserRole.toEnum(1)) {
+            return List.of(new SimpleGrantedAuthority("ROLE_GESTOR"),
+                    new SimpleGrantedAuthority("ROLE_FUNCIONARIO"),
+                    new SimpleGrantedAuthority("ROLE_TECNICO")
+            );
+        }
+
+        if (this.role == UserRole.toEnum(3)) {
+            return List.of(new SimpleGrantedAuthority("ROLE_TECNICO"));
+        }
+
+
+        return List.of(new SimpleGrantedAuthority("ROLE_FUNCIONARIO"));
+    }
+
+    @Override
+    public String getPassword() {
+        return senha;
+    }
+
+    @Override
+    public String getUsername() {
+        return nome;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

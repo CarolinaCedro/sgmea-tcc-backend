@@ -34,14 +34,14 @@ public class SgmeaBackendApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
 
-        Tecnico tecnico1 = new Tecnico(null, "Ana Carolina", "055.287.750-60", "carol@email.com", "1234");
-        Funcionario funcionario1 = new Funcionario(null, "Lalisa Manoban", "701.450.640-42", "lalisa@email.com", "1234");
-
-        Chamado chamado1 = new Chamado(null, Prioridade.ALTA, Status.ABERTO, "Maxilar estralando e doí", "Pq isso do nada oxe ?!", tecnico1, funcionario1);
-
-        funcionarioController.create(funcionario1);
-        tecnicoController.create(tecnico1);
-        chamadoController.create(chamado1);
+//        Tecnico tecnico1 = new Tecnico(null, "Ana Carolina", "055.287.750-60", "carol@email.com", "1234");
+//        Funcionario funcionario1 = new Funcionario(null, "Lalisa Manoban", "701.450.640-42", "lalisa@email.com", "1234");
+//
+//        Chamado chamado1 = new Chamado(null, Prioridade.ALTA, Status.ABERTO, "Maxilar estralando e doí", "Pq isso do nada oxe ?!", tecnico1, funcionario1);
+//
+//        funcionarioController.create(funcionario1);
+//        tecnicoController.create(tecnico1);
+//        chamadoController.create(chamado1);
 
     }
 }

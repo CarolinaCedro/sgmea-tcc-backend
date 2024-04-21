@@ -3,10 +3,8 @@ package tcc.sgmeabackend.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
-import org.hibernate.annotations.UuidGenerator;
-import org.hibernate.validator.constraints.UUID;
 import tcc.sgmeabackend.model.dtos.ClienteDTO;
-import tcc.sgmeabackend.model.enums.Perfil;
+import tcc.sgmeabackend.model.enums.UserRole;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,12 +27,10 @@ public class Funcionario extends Pessoa {
 
     public Funcionario() {
         super();
-        addPerfil(Perfil.CLIENTE);
     }
 
     public Funcionario(String id, String nome, String cpf, String email, String senha) {
         super(id, nome, cpf, email, senha);
-        addPerfil(Perfil.CLIENTE);
     }
 
     public Funcionario(ClienteDTO obj) {
@@ -44,7 +40,6 @@ public class Funcionario extends Pessoa {
         this.cpf = obj.getCpf();
         this.email = obj.getEmail();
         this.senha = obj.getSenha();
-        this.perfis = obj.getPerfis().stream().map(x -> x.getCodigo()).collect(Collectors.toSet());
         this.dataCriacao = obj.getDataCriacao();
     }
 
