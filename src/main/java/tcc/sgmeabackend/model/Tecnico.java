@@ -39,13 +39,6 @@ public class Tecnico extends Pessoa {
     }
 
 
-    public Tecnico(TecnicoDTO obj) {
-        super();
-        this.nome = obj.getNome();
-        this.cpf = obj.getCpf();
-        this.email = obj.getEmail();
-        this.senha = obj.getSenha();
-        this.dataCriacao = obj.getDataCriacao();
-    }
+
 
 }

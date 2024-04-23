@@ -1,5 +1,8 @@
 package tcc.sgmeabackend.model.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum UserRole {
 
 	ADMIN(0, "ROLE_ADMIN"),
@@ -15,15 +18,7 @@ public enum UserRole {
 		this.descricao = descricao;
 	}
 
-	public Integer getCodigo() {
-		return codigo;
-	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public static UserRole toEnum(Integer cod) {
+    public static UserRole toEnum(Integer cod) {
 		if(cod == null) {
 			return null;
 		}

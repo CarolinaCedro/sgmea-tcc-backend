@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.annotations.UuidGenerator;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,29 +20,29 @@ import java.util.List;
 
 @Data
 @Entity
-public class Pessoa implements Serializable, UserDetails {
+public class Pessoa implements UserDetails {
 
-    private static final long serialVersionUID = 1L;
 
     @Id
     @UuidGenerator
-    protected String id;
+    private String id;
 
-    protected String nome;
-
-    @Column(unique = true)
-    protected String cpf;
+    @NotNull(message = "O campo NOME é requerido")
+    private String nome;
 
     @Column(unique = true)
-    protected String email;
-    protected String senha;
+    private String cpf;
+
+    @Column(unique = true)
+    private String email;
+    private String senha;
 
 
     private UserRole role;
 
 
     @JsonFormat(pattern = "dd/MM/yyyy")
-    protected LocalDate dataCriacao = LocalDate.now();
+    private LocalDate dataCriacao = LocalDate.now();
 
     public Pessoa() {
         super();
@@ -56,12 +57,14 @@ public class Pessoa implements Serializable, UserDetails {
         this.senha = senha;
     }
 
-    public Pessoa(String nome, String encryptedPassword, UserRole role) {
+    public Pessoa(String id, String nome, String cpf, String email, String senha, UserRole role) {
+        this.id = id;
         this.nome = nome;
-        this.senha = encryptedPassword;
+        this.cpf = cpf;
+        this.email = email;
+        this.senha = senha;
         this.role = role;
     }
-
 
     //Autenticação
 

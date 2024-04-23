@@ -33,15 +33,5 @@ public class Funcionario extends Pessoa {
         super(id, nome, cpf, email, senha);
     }
 
-    public Funcionario(ClienteDTO obj) {
-        super();
-        this.id = obj.getId();
-        this.nome = obj.getNome();
-        this.cpf = obj.getCpf();
-        this.email = obj.getEmail();
-        this.senha = obj.getSenha();
-        this.dataCriacao = obj.getDataCriacao();
-    }
-
 
 }
