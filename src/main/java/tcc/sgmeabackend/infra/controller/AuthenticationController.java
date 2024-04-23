@@ -8,7 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import tcc.sgmeabackend.model.Pessoa;
@@ -24,12 +26,12 @@ public class AuthenticationController {
 
 
     @Autowired
-    private  AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
 
 
     private final PessoaRepository pessoaRepository;
 
-    public AuthenticationController( PessoaRepository pessoaRepository) {
+    public AuthenticationController(PessoaRepository pessoaRepository) {
         this.pessoaRepository = pessoaRepository;
     }
 
@@ -43,13 +45,12 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody Pessoa resource) {
 
-        var usernamePassword = new UsernamePasswordAuthenticationToken(resource.getUsername(),resource.getPassword());
 
+        Authentication usernamePassword = new UsernamePasswordAuthenticationToken(resource.getUsername(), resource.getPassword());
 
 
         logger.info("Tentativa de login do usuário: {}", resource.getNome());
         logger.info("Tentativa de login da senha: {}", resource.getSenha());
-
 
 
         logger.info("O que vem nesse usernamePassword: {}", usernamePassword.getPrincipal());
@@ -60,6 +61,7 @@ public class AuthenticationController {
         try {
 
             var auth = authenticationManager.authenticate(usernamePassword);
+            System.out.println("aquii" + auth);
             logger.info("Usuário autenticado com sucesso: {}", resource.getNome());
             return ResponseEntity.ok().build();
         } catch (AuthenticationException e) {
@@ -83,7 +85,7 @@ public class AuthenticationController {
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(resource.getPassword());
 
-        Pessoa newUser = new Pessoa(null,resource.getNome(), resource.getCpf(), resource.getEmail(),encryptedPassword, resource.getRole());
+        Pessoa newUser = new Pessoa(null, resource.getNome(), resource.getCpf(), resource.getEmail(), encryptedPassword, resource.getRole());
 
         System.out.println("user" + newUser);
 
