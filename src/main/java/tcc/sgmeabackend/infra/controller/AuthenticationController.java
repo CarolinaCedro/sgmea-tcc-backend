@@ -42,7 +42,8 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody Pessoa resource) {
-        var usernamePassword = new UsernamePasswordAuthenticationToken(resource.getNome(), resource.getSenha());
+
+        var usernamePassword = new UsernamePasswordAuthenticationToken(resource.getUsername(),resource.getPassword());
 
 
 
