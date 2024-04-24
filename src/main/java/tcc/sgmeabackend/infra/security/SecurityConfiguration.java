@@ -16,6 +16,9 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration {
 
 
+    //.authorizeHttpRequests(auth -> auth .requestMatchers(toH2Console()).permitAll()
+    //.csrf(csrf -> csrf .ignoringRequestMatchers(toH2Console())
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

@@ -61,13 +61,13 @@ public class Pessoa implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.role == UserRole.ADMIN) {
-            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"),
-                    new SimpleGrantedAuthority("ROLE_GESTOR"),
-                    new SimpleGrantedAuthority("ROLE_FUNCIONARIO"),
-                    new SimpleGrantedAuthority("ROLE_TECNICO")
+            return List.of(new SimpleGrantedAuthority("ADMIN"),
+                    new SimpleGrantedAuthority("GESTOR"),
+                    new SimpleGrantedAuthority("FUNCIONARIO"),
+                    new SimpleGrantedAuthority("TECNICO")
 
             );
-        } else return List.of(new SimpleGrantedAuthority("ROLE_FUNCIONARIO"));
+        } else return List.of(new SimpleGrantedAuthority("FUNCIONARIO"));
 
 //        if (this.role == UserRole.toEnum(1)) {
 //            return List.of(new SimpleGrantedAuthority("ROLE_GESTOR"),
