@@ -1,99 +1,56 @@
 package tcc.sgmeabackend.infra.controller;
 
+
 import jakarta.validation.Valid;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.*;
-import tcc.sgmeabackend.model.Pessoa;
-import tcc.sgmeabackend.repository.PessoaRepository;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import tcc.sgmeabackend.infra.security.TokenService;
+import tcc.sgmeabackend.model.User;
+import tcc.sgmeabackend.model.dtos.AuthenticationDto;
+import tcc.sgmeabackend.model.dtos.LoginResponseDTO;
+import tcc.sgmeabackend.model.dtos.RegisterDto;
+import tcc.sgmeabackend.repository.UserRepository;
 
 @RestController
-@RequestMapping("/api/sgmea/v1/auth")
+@RequestMapping("auth")
 public class AuthenticationController {
-
-    protected static final Logger logger = LogManager.getLogger();
-
 
     @Autowired
     private AuthenticationManager authenticationManager;
-
-
-    private final PessoaRepository pessoaRepository;
-
-    public AuthenticationController(PessoaRepository pessoaRepository) {
-        this.pessoaRepository = pessoaRepository;
-    }
-
-
-    @GetMapping()
-    public ResponseEntity<List<Pessoa>> getAuthentication() {
-        return ResponseEntity.ok(this.pessoaRepository.findAll());
-    }
-
+    @Autowired
+    private UserRepository repository;
+    @Autowired
+    private TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody Pessoa resource) {
+    public ResponseEntity login(@RequestBody @Valid AuthenticationDto data){
+        var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
+        var auth = this.authenticationManager.authenticate(usernamePassword);
 
+        var token = tokenService.generateToken((User) auth.getPrincipal());
 
-        Authentication usernamePassword = new UsernamePasswordAuthenticationToken(resource.getUsername(), resource.getPassword());
-
-
-        logger.info("Tentativa de login do usuário: {}", resource.getNome());
-        logger.info("Tentativa de login da senha: {}", resource.getSenha());
-
-
-        logger.info("O que vem nesse usernamePassword: {}", usernamePassword.getPrincipal());
-        logger.info("O que vem nesse credetians: {}", usernamePassword.getCredentials());
-        logger.info("O que vem nesse object: {}", usernamePassword);
-
-
-        try {
-
-            var auth = authenticationManager.authenticate(usernamePassword);
-            System.out.println("aquii" + auth);
-            logger.info("Usuário autenticado com sucesso: {}", resource.getNome());
-            return ResponseEntity.ok().build();
-        } catch (AuthenticationException e) {
-            logger.error("Erro ao autenticar usuário: {}", e.getMessage());
-            logger.error(e.getCause());
-            logger.error(e.getLocalizedMessage());
-            logger.error(e.getClass());
-            logger.error(e.fillInStackTrace());
-
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
-
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid Pessoa resource) {
+    public ResponseEntity register(@RequestBody @Valid RegisterDto data){
+        if(this.repository.findByLogin(data.login()) != null) return ResponseEntity.badRequest().build();
 
-        if (this.pessoaRepository.findByNome(resource.getNome()) != null) {
-            return ResponseEntity.badRequest().build();
-        }
+        String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
+        User newUser = new User(data.login(), encryptedPassword, data.role());
 
-        String encryptedPassword = new BCryptPasswordEncoder().encode(resource.getPassword());
-
-        Pessoa newUser = new Pessoa(null, resource.getNome(), resource.getCpf(), resource.getEmail(), encryptedPassword, resource.getRole());
-
-        System.out.println("user" + newUser);
-
-        this.pessoaRepository.save(newUser);
+        this.repository.save(newUser);
 
         return ResponseEntity.ok().build();
-
     }
-
-
 }
+
+
+

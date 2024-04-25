@@ -5,25 +5,20 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import tcc.sgmeabackend.model.enums.UserRole;
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.List;
 
 
-@Data
+@Getter
+@Setter
+@ToString
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Pessoa implements UserDetails {
+public class Pessoa {
 
 
     @Id
@@ -56,63 +51,4 @@ public class Pessoa implements UserDetails {
         this.role = role;
     }
 
-    //Autenticação
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (this.role == UserRole.ADMIN) {
-            return List.of(new SimpleGrantedAuthority("ADMIN"),
-                    new SimpleGrantedAuthority("GESTOR"),
-                    new SimpleGrantedAuthority("FUNCIONARIO"),
-                    new SimpleGrantedAuthority("TECNICO")
-
-            );
-        } else return List.of(new SimpleGrantedAuthority("FUNCIONARIO"));
-
-//        if (this.role == UserRole.toEnum(1)) {
-//            return List.of(new SimpleGrantedAuthority("ROLE_GESTOR"),
-//                    new SimpleGrantedAuthority("ROLE_FUNCIONARIO"),
-//                    new SimpleGrantedAuthority("ROLE_TECNICO")
-//            );
-//        }
-//
-//        if (this.role == UserRole.toEnum(3)) {
-//            return List.of(new SimpleGrantedAuthority("ROLE_TECNICO"));
-//        }
-//
-//
-//        return List.of(new SimpleGrantedAuthority("ROLE_FUNCIONARIO"));
-    }
-
-    @Override
-    public String getUsername() {
-        return nome;
-    }
-
-
-    @Override
-    public String getPassword() {
-        return senha;
-    }
-
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }
