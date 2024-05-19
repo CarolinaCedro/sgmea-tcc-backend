@@ -1,5 +1,9 @@
 package tcc.sgmeabackend.controller;
 
+import jakarta.annotation.security.PermitAll;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tcc.sgmeabackend.model.Tecnico;
@@ -7,6 +11,7 @@ import tcc.sgmeabackend.service.AbstractService;
 import tcc.sgmeabackend.service.impl.TecnicoServiceImpl;
 
 @RestController
+@PermitAll
 @RequestMapping("api/sgmea/v1/tecnico")
 public class TecnicoController extends AbstractController<Tecnico> {
 
@@ -20,5 +25,16 @@ public class TecnicoController extends AbstractController<Tecnico> {
     @Override
     protected AbstractService<Tecnico> getService() {
         return service;
+    }
+
+    @Override
+    public ResponseEntity<Tecnico> create(@RequestBody Tecnico resource) {
+        if (resource.getSenha() != null && !resource.getSenha().isEmpty()) {
+            String encryptedPassword = new BCryptPasswordEncoder().encode(resource.getSenha());
+            resource.setSenha(encryptedPassword);
+        } else {
+            throw new IllegalArgumentException("Password cannot be null or empty");
+        }
+        return super.create(resource);
     }
 }

@@ -3,7 +3,11 @@ package tcc.sgmeabackend.model.enums;
 
 public enum UserRole {
     ADMIN("admin"),
-    USER("user");
+    GESTOR("gestor"),
+    FUNCIONARIO("funcionario"),
+    TECNICO("tecnico"),
+
+    ;
 
     private String role;
 

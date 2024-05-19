@@ -2,10 +2,8 @@ package tcc.sgmeabackend.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tcc.sgmeabackend.model.Chamado;
 import tcc.sgmeabackend.model.User;
 import tcc.sgmeabackend.service.AbstractService;
-import tcc.sgmeabackend.service.impl.ChamadoServiceImpl;
 import tcc.sgmeabackend.service.impl.UserServiceImpl;
 
 @RestController

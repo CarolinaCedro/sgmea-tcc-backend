@@ -1,0 +1,11 @@
+package tcc.sgmeabackend.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import tcc.sgmeabackend.model.ChamadoAtribuido;
+import tcc.sgmeabackend.model.Equipamento;
+
+@Repository
+public interface ChamadoAtribuidoRepository extends JpaRepository<ChamadoAtribuido, String> {
+}
+

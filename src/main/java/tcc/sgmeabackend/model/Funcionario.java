@@ -9,18 +9,19 @@ import java.util.List;
 
 @Getter
 @Entity
-public class Funcionario extends Pessoa {
+public class Funcionario extends User {
+
     private static final long serialVersionUID = 1L;
 
+    @ManyToOne
+    @JoinColumn(name = "departamento_id")
+    private Departamento departamento;
 
-//    @Id
-//    @UuidGenerator
-//    private String id;
-
+    private String funcao;
 
     @JsonIgnore
     @OneToMany(mappedBy = "funcionario", fetch = FetchType.EAGER)
-    private List<Chamado> chamados = new ArrayList<>();
+    private List<ChamadoCriado> chamadoCriados = new ArrayList<>();
 
     public Funcionario() {
         super();

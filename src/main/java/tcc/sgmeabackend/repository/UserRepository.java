@@ -7,5 +7,5 @@ import tcc.sgmeabackend.model.User;
 
 
 public interface UserRepository extends JpaRepository<User, String> {
-    UserDetails findByLogin(String login);
+    UserDetails findByNome(String nome);
 }

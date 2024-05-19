@@ -1,2 +1,7 @@
-package tcc.sgmeabackend.notifications.model.enums;public class StatusEmail {
+package tcc.sgmeabackend.notifications.model.enums;
+
+public enum StatusEmail {
+    PROCESSANDO,
+    ENVIADO,
+    ERRO;
 }
