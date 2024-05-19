@@ -1,4 +1,5 @@
-![image](https://github.com/CarolinaCedro/sgmea-tcc-backend/assets/75391803/d5400003-aa13-43e9-b659-bfa950338447)
+![image](https://github.com/CarolinaCedro/sgmea-tcc-backend/assets/75391803/76efbb68-8456-4997-96bc-bb9f3dfa2483)
+
 
 
 * Diagrama de Componentes
