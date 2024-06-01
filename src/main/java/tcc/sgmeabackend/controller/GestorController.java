@@ -7,43 +7,42 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tcc.sgmeabackend.model.Funcionario;
+import tcc.sgmeabackend.model.Gestor;
 import tcc.sgmeabackend.model.dtos.FuncionarioResponse;
+import tcc.sgmeabackend.model.dtos.GestorResponse;
 import tcc.sgmeabackend.service.AbstractService;
-import tcc.sgmeabackend.service.impl.FuncionarioServiceImpl;
 import tcc.sgmeabackend.service.impl.GestorServiceImpl;
 
 @RestController
-@RequestMapping("api/sgmea/v1/funcionario")
-public class FuncionarioController extends AbstractController<Funcionario, FuncionarioResponse> {
+@RequestMapping("api/sgmea/v1/gestor")
+public class GestorController extends AbstractController<Gestor, GestorResponse> {
 
-    private final FuncionarioServiceImpl service;
-    private final GestorServiceImpl gestorService;
+    private final GestorServiceImpl service;
 
-    public FuncionarioController(FuncionarioServiceImpl service, ModelMapper modelMapper, GestorServiceImpl gestorService) {
+    public GestorController(GestorServiceImpl service, ModelMapper modelMapper) {
         super(modelMapper);
         this.service = service;
-        this.gestorService = gestorService;
     }
 
     @Override
-    protected AbstractService<Funcionario> getService() {
+    protected Class<GestorResponse> getDtoClass() {
+        return GestorResponse.class;
+    }
+
+    @Override
+    protected AbstractService<Gestor> getService() {
         return service;
     }
 
-    @Override
-    protected Class<FuncionarioResponse> getDtoClass() {
-        return FuncionarioResponse.class;
-    }
 
     @Override
-    public ResponseEntity<FuncionarioResponse> create(@RequestBody Funcionario resource) {
+    public ResponseEntity<GestorResponse> create(@RequestBody Gestor resource) {
         if (resource.getSenha() != null && !resource.getSenha().isEmpty()) {
             String encryptedPassword = new BCryptPasswordEncoder().encode(resource.getSenha());
             resource.setSenha(encryptedPassword);
         } else {
             throw new IllegalArgumentException("A senha não pode ser nula ou vazia");
         }
-
         return super.create(resource);
     }
 }

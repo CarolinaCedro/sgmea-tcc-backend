@@ -1,33 +1,42 @@
 package tcc.sgmeabackend.controller;
 
 import jakarta.validation.Valid;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tcc.sgmeabackend.service.AbstractService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-public abstract class AbstractController<T> implements RestController<T> {
+public abstract class AbstractController<T, E> implements RestController<T, E> {
 
+    private final ModelMapper modelMapper;
+
+    protected AbstractController(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
+    }
 
     protected abstract AbstractService<T> getService();
 
-
     @Override
     @GetMapping
-    public ResponseEntity<List<T>> findAll() {
-        return ResponseEntity.ok(this.getService().findAll());
+    public ResponseEntity<List<E>> findAll() {
+        List<T> result = this.getService().findAll();
+        List<E> response = result.stream()
+                .map(entity -> modelMapper.map(entity, getDtoClass()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(response);
     }
 
     @Override
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<T>> findById(@PathVariable String id) {
-
+    public ResponseEntity<Optional<E>> findById(@PathVariable String id) {
         Optional<T> result = this.getService().findById(id);
-
         if (result.isPresent()) {
-            return ResponseEntity.ok(result);
+            E response = modelMapper.map(result.get(), getDtoClass());
+            return ResponseEntity.ok(Optional.of(response));
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -35,14 +44,18 @@ public abstract class AbstractController<T> implements RestController<T> {
 
     @Override
     @PostMapping
-    public ResponseEntity<T> create(@Valid @RequestBody T resource) {
-        return ResponseEntity.ok(this.getService().create(resource));
+    public ResponseEntity<E> create(@Valid @RequestBody T resource) {
+        T createdResource = this.getService().create(resource);
+        E response = modelMapper.map(createdResource, getDtoClass());
+        return ResponseEntity.ok(response);
     }
 
     @Override
     @PutMapping("/{id}")
-    public ResponseEntity<T> update(@PathVariable String id, @Valid @RequestBody T resource) {
-        return ResponseEntity.ok(this.getService().create(resource));
+    public ResponseEntity<E> update(@PathVariable String id, @Valid @RequestBody T resource) {
+        T updatedResource = this.getService().update(id, resource);
+        E response = modelMapper.map(updatedResource, getDtoClass());
+        return ResponseEntity.ok(response);
     }
 
     @Override
@@ -51,8 +64,5 @@ public abstract class AbstractController<T> implements RestController<T> {
         this.getService().delete(id);
     }
 
-//    @Override
-//    public ResponseEntity<Page<T>> findAll(Pageable pageable) {
-//        return ResponseEntity.ok(this.getService().findAll(pageable.getPageFormat(1)));
-//    }
+    protected abstract Class<E> getDtoClass();
 }
