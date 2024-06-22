@@ -3,6 +3,7 @@ package tcc.sgmeabackend.model.dtos;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import tcc.sgmeabackend.model.Gestor;
 
 import java.time.LocalDate;
 
@@ -21,4 +22,8 @@ public class ChamadoCriadoResponse {
     private String observacaoConsolidacao;
     private String observacoes;
     private FuncionarioChamadoDto funcionario;
+
+    public ChamadoCriadoResponse(String funcionarioNaoEncontrado) {
+        throw new RuntimeException(funcionarioNaoEncontrado);
+    }
 }

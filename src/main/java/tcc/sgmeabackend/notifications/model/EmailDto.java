@@ -1,7 +1,8 @@
 package tcc.sgmeabackend.notifications.model;
 
 public record EmailDto(
-        String destinatario,
+        String emailDestinatario,
+        String nome,
         String assunto,
         String mensagem
 ) {
