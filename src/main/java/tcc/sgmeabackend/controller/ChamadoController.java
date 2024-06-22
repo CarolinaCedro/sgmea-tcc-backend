@@ -44,6 +44,7 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
 
     }
 
+
     @Override
     public ResponseEntity<ChamadoCriadoResponse> create(@RequestBody ChamadoCriado resource) {
         String funcionarioId = resource.getFuncionario().getId();

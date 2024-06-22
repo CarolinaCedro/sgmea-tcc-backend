@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notificação de Chamado Criado</title>
+    <title>Notificação de Chamado em Andamento</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,16 +12,14 @@
             margin: 0;
             padding: 0;
         }
-
         .container {
             width: 100%;
             max-width: 600px;
             margin: 20px auto;
             background-color: #ffffff;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
-
         .header {
             background-color: #4CAF50;
             color: white;
@@ -30,13 +28,11 @@
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
         }
-
         .content {
             padding: 20px;
             text-align: left;
             line-height: 1.6;
         }
-
         .footer {
             background-color: #4CAF50;
             color: white;
@@ -45,7 +41,6 @@
             border-bottom-left-radius: 8px;
             border-bottom-right-radius: 8px;
         }
-
         .footer p {
             margin: 0;
         }
@@ -54,19 +49,19 @@
 <body>
 <div class="container">
     <div class="header">
-        <h2>Notificação de Chamado Criado</h2>
+        <h2>Notificação de Chamado em Andamento</h2>
     </div>
     <div class="content">
-        <p>Prezado(a),</p>
-        <p>Um novo chamado foi criado em nosso sistema com a seguinte descrição:</p>
-        <p>#{Descrição}</p>
-        <p>Data: #{data}</p>
-        <p>Funcionário: #{funcionario}</p>
-        <p>O gestor responsável já foi notificado e deve entrar no sistema para fazer as devidas atribuições.</p>
-        <p>Obrigado por registrar o chamado!</p>
+        <p>Olá [Nome do Funcionário],</p>
+        <p>Seu chamado foi atribuído com sucesso e está sendo tratado pelo técnico responsável. A seguir estão os detalhes:</p>
+        <p>Prioridade: [Prioridade do Chamado]</p>
+        <p>Técnico Responsável: [Nome do Técnico]</p>
+        <p>Agradecemos pela sua paciência enquanto trabalhamos para resolver seu problema.</p>
+        <p>Atenciosamente,</p>
+        <p>Equipe de Suporte - SGMEA</p>
     </div>
     <div class="footer">
-        <p>Equipe de Suporte - SGMEA</p>
+        <p>Este é um email automático. Por favor, não responda.</p>
     </div>
 </div>
 </body>

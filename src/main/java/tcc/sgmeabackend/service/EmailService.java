@@ -7,7 +7,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import tcc.sgmeabackend.model.dtos.EmailChamadoCriadoDto;
 import tcc.sgmeabackend.notifications.model.EmailDto;
 
 import java.io.IOException;
