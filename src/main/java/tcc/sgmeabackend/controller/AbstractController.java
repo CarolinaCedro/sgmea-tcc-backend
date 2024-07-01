@@ -1,7 +1,11 @@
 package tcc.sgmeabackend.controller;
 
+import io.micrometer.common.util.StringUtils;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tcc.sgmeabackend.service.AbstractService;
@@ -29,6 +33,18 @@ public abstract class AbstractController<T, E> implements RestController<T, E> {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
+
+
+    @GetMapping("/pagination")
+    public Page<T> getUsers(@RequestParam(value = "offset", required = false) Integer offset,
+                            @RequestParam(value = "pageSize", required = false) Integer pageSize,
+                            @RequestParam(value = "sortBy", required = false) String sortBy) {
+        if (null == offset) offset = 0;
+        if (null == pageSize) pageSize = 10;
+        if (StringUtils.isEmpty(sortBy)) sortBy = "id";
+        return this.getService().findAllPagination(PageRequest.of(offset, pageSize, Sort.by(sortBy)));
+    }
+
 
     @Override
     @GetMapping("/{id}")
