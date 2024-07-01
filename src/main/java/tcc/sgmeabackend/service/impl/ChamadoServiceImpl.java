@@ -1,5 +1,6 @@
 package tcc.sgmeabackend.service.impl;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import tcc.sgmeabackend.model.ChamadoAtribuido;
@@ -7,12 +8,15 @@ import tcc.sgmeabackend.model.ChamadoCriado;
 import tcc.sgmeabackend.model.Gestor;
 import tcc.sgmeabackend.model.Tecnico;
 import tcc.sgmeabackend.model.dtos.ChamadoAtribuidoDto;
+import tcc.sgmeabackend.model.dtos.ChamadoConsolidado;
 import tcc.sgmeabackend.model.enums.Status;
 import tcc.sgmeabackend.repository.ChamadoAtribuidoRepository;
 import tcc.sgmeabackend.repository.ChamadoCriadoRepository;
 import tcc.sgmeabackend.repository.GestorRepository;
 import tcc.sgmeabackend.repository.TecnicoRepository;
 import tcc.sgmeabackend.service.AbstractService;
+
+import java.util.Optional;
 
 @Service
 public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
@@ -22,11 +26,15 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
     private final GestorRepository gestorRepository;
     private final ChamadoAtribuidoRepository chamadoAtribuidoRepository;
 
-    public ChamadoServiceImpl(ChamadoCriadoRepository chamadoCriadoRepository, TecnicoRepository tecnicoRepository, GestorRepository gestorRepository, ChamadoAtribuidoRepository chamadoAtribuidoRepository) {
+    private final ModelMapper modelMapper;
+
+
+    public ChamadoServiceImpl(ChamadoCriadoRepository chamadoCriadoRepository, TecnicoRepository tecnicoRepository, GestorRepository gestorRepository, ChamadoAtribuidoRepository chamadoAtribuidoRepository, ModelMapper modelMapper) {
         this.chamadoCriadoRepository = chamadoCriadoRepository;
         this.tecnicoRepository = tecnicoRepository;
         this.gestorRepository = gestorRepository;
         this.chamadoAtribuidoRepository = chamadoAtribuidoRepository;
+        this.modelMapper = modelMapper;
     }
 
 
@@ -51,10 +59,34 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
         return chamadoAtribuidoRepository.save(chamadoAtribuido);
     }
 
-    public void consolidarChamado(String chamadoAtribuidoId, String observacaoConsolidacao) {
-        ChamadoAtribuido chamadoAtribuido = chamadoAtribuidoRepository.findById(chamadoAtribuidoId).orElseThrow();
-        Tecnico tecnico = chamadoAtribuido.getTecnico();
-        tecnico.consolidarChamado(chamadoAtribuido, observacaoConsolidacao);
-        chamadoCriadoRepository.save(chamadoAtribuido.getChamadoCriado());
+    public ChamadoConsolidado consolidarChamado(ChamadoAtribuido chamadoAtribuido) {
+        String idChamado = chamadoAtribuido.getChamadoCriado().getId();
+        Optional<ChamadoCriado> criado = this.findById(idChamado);
+        if (criado.isPresent()) {
+            ChamadoCriado existente = criado.get();
+            ChamadoCriado chamadoCriado = chamadoAtribuido.getChamadoCriado();
+
+            // Atualizando apenas os campos fornecidos no payload
+            if (chamadoCriado.getDataFechamento() != null) {
+                existente.setDataFechamento(chamadoCriado.getDataFechamento());
+            }
+            if (chamadoCriado.getStatus() != null) {
+                existente.setStatus(chamadoCriado.getStatus());
+            }
+            if (chamadoCriado.getObservacaoConsolidacao() != null) {
+                existente.setObservacaoConsolidacao(chamadoCriado.getObservacaoConsolidacao());
+            }
+
+            this.create(existente);
+
+
+
+
+            return null;
+        }
+
+        return null;
     }
+
+
 }

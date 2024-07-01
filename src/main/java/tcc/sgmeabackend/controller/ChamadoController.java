@@ -3,21 +3,23 @@ package tcc.sgmeabackend.controller;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import tcc.sgmeabackend.model.ChamadoAtribuido;
 import tcc.sgmeabackend.model.ChamadoCriado;
 import tcc.sgmeabackend.model.Funcionario;
 import tcc.sgmeabackend.model.Gestor;
 import tcc.sgmeabackend.model.dtos.ChamadoAtribuidoDto;
+import tcc.sgmeabackend.model.dtos.ChamadoConsolidado;
 import tcc.sgmeabackend.model.dtos.ChamadoCriadoResponse;
+import tcc.sgmeabackend.repository.ChamadoAtribuidoRepository;
 import tcc.sgmeabackend.service.AbstractService;
 import tcc.sgmeabackend.service.EmailService;
 import tcc.sgmeabackend.service.impl.ChamadoServiceImpl;
 import tcc.sgmeabackend.service.impl.FuncionarioServiceImpl;
 import tcc.sgmeabackend.service.impl.GestorServiceImpl;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -25,14 +27,17 @@ import java.util.Optional;
 public class ChamadoController extends AbstractController<ChamadoCriado, ChamadoCriadoResponse> {
 
     private final ChamadoServiceImpl service;
+
+    private final ChamadoAtribuidoRepository chamadoAtribuidoRepository;
     private final GestorServiceImpl gestorService;
     private final FuncionarioServiceImpl funcionarioService;
 
     private final EmailService emailService;
 
-    public ChamadoController(ChamadoServiceImpl service, ModelMapper modelMapper, GestorServiceImpl gestorService, FuncionarioServiceImpl funcionarioService, EmailService emailService) {
+    public ChamadoController(ChamadoServiceImpl service, ModelMapper modelMapper, ChamadoAtribuidoRepository chamadoAtribuidoRepository, GestorServiceImpl gestorService, FuncionarioServiceImpl funcionarioService, EmailService emailService) {
         super(modelMapper);
         this.service = service;
+        this.chamadoAtribuidoRepository = chamadoAtribuidoRepository;
         this.gestorService = gestorService;
         this.funcionarioService = funcionarioService;
         this.emailService = emailService;
@@ -42,6 +47,17 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
     public void atribuirChamado(@RequestBody ChamadoAtribuidoDto chamadoAtribuidoDto) {
         this.service.atribuirChamado(chamadoAtribuidoDto);
 
+    }
+
+    @GetMapping("/chamados-atribuidos")
+    public ResponseEntity<List<ChamadoAtribuido>> chamadoAtribuidos() {
+        return ResponseEntity.ok(this.chamadoAtribuidoRepository.findAll());
+    }
+
+    @PatchMapping("/consolidacao-chamado")
+    public ResponseEntity<ChamadoConsolidado> consolidarChamado(@RequestBody ChamadoAtribuido chamadoCriado) {
+
+        return ResponseEntity.ok(this.service.consolidarChamado(chamadoCriado));
     }
 
 
