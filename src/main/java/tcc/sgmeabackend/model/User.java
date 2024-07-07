@@ -83,6 +83,11 @@ public class User implements UserDetails {
                     new SimpleGrantedAuthority("ROLE_TECNICO")
             );
         }
+        if (this.role == UserRole.FUNCIONARIO) {
+            return List.of(
+                    new SimpleGrantedAuthority("ROLE_FUNCIONARIO")
+            );
+        }
 
         return List.of(new SimpleGrantedAuthority("ROLE_FUNCIONARIO"));
     }

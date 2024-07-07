@@ -30,6 +30,7 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/api/sgmea/v1/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/sgmea/v1/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "api/sgmea/v1/users").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
