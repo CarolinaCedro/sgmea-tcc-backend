@@ -1,6 +1,5 @@
 package tcc.sgmeabackend.model.dtos;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,13 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserResponseDto {
+public class FuncionarioChamadoDto {
 
     private String id;
-    private String nome;
-    private String cpf;
-    private String email;
-    private String gestor;
-    private String perfil;
-
 }

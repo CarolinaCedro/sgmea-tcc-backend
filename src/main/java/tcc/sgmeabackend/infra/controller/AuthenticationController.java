@@ -18,7 +18,6 @@ import tcc.sgmeabackend.model.User;
 import tcc.sgmeabackend.model.dtos.AuthenticationDto;
 import tcc.sgmeabackend.model.dtos.LoginResponseDTO;
 import tcc.sgmeabackend.model.dtos.RegisterDto;
-import tcc.sgmeabackend.notifications.model.EmailDto;
 import tcc.sgmeabackend.repository.UserRepository;
 
 @RestController
@@ -31,8 +30,7 @@ public class AuthenticationController {
     private UserRepository repository;
     @Autowired
     private TokenService tokenService;
-//    @Autowired
-//    private EmailServiceImpl emailService;
+
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDto data) {

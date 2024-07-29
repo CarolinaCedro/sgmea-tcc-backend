@@ -1,23 +1,19 @@
 package tcc.sgmeabackend.controller;
 
-
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface RestController<T> {
+public interface RestController<T, E> {
 
-    ResponseEntity<List<T>> findAll();
+    ResponseEntity<List<E>> findAll();
 
-    ResponseEntity<Optional<T>> findById(String id);
+    ResponseEntity<Optional<E>> findById(String id);
 
-    ResponseEntity<T> create(T resource);
+    ResponseEntity<E> create(T resource);
 
-    ResponseEntity<T> update(String id, T resource);
+    ResponseEntity<E> update(String id, T resource);
 
     void delete(String id);
-
-
-//    ResponseEntity<Page<T>> findAll(Pageable pageable);
 }
