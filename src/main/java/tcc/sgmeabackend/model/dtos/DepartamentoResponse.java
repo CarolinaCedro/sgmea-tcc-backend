@@ -9,4 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DepartamentoResponse {
     private String id;
+
+    private String nome;
+
+    private String descricao;
 }

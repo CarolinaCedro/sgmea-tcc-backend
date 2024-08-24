@@ -31,11 +31,12 @@ public class SecurityConfigurations {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Habilita e configura CORS
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/api/sgmea/v1/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/sgmea/v1/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/sgmea/v1/users/forgot-password").permitAll()
                         .requestMatchers(HttpMethod.GET, "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "api/sgmea/v1/users").hasRole("ADMIN")
                         .anyRequest().authenticated()
@@ -63,10 +64,12 @@ public class SecurityConfigurations {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200")); // Origens permitidas
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT","PATCH", "DELETE")); // Métodos permitidos
+        configuration.setAllowedHeaders(Arrays.asList("*")); // Cabeçalhos permitidos
+        configuration.setAllowCredentials(true); // Permitir credenciais
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration("/**", configuration); // Aplica configuração CORS para todas as rotas
         return source;
     }
 }

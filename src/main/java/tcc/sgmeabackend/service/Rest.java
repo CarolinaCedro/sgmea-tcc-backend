@@ -1,15 +1,12 @@
 package tcc.sgmeabackend.service;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import java.util.List;
 import java.util.Optional;
 
 public interface Rest<T> {
 
-
     List<T> findAll();
+
 
     Optional<T> findById(String id);
 
@@ -18,9 +15,6 @@ public interface Rest<T> {
     T update(String id, T resource);
 
     void delete(String id);
-
-
-    Page<T> findAll(Pageable pageable);
 
 
 }

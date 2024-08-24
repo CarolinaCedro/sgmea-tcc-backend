@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import tcc.sgmeabackend.model.enums.UserRole;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -32,6 +33,13 @@ public class User implements UserDetails {
     private String cpf;
 
     private String email;
+
+
+    // Campo para armazenar o token de recuperação de senha
+    private String resetToken;
+
+    // Campo para armazenar a data de expiração do token
+    private LocalDateTime resetTokenExpiryDate;
 
     @ManyToOne
     @JoinColumn(name = "gestor_id")
@@ -124,4 +132,10 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public void setResetToken(String token) {
+        this.resetToken = token;
+        this.resetTokenExpiryDate = LocalDateTime.now().plusHours(1); // Expira em 1 hora, por exemplo
+    }
+
 }

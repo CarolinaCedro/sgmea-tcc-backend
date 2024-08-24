@@ -8,5 +8,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GestorResponse {
+
     private String id;
+    private String nome;
+    private String cpf;
+    private String email;
+    private String perfil;
+    private String areaGestao;
 }

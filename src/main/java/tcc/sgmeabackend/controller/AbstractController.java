@@ -1,6 +1,7 @@
 package tcc.sgmeabackend.controller;
 
 import io.micrometer.common.util.StringUtils;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -8,9 +9,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tcc.sgmeabackend.model.PageableResource;
 import tcc.sgmeabackend.service.AbstractService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -26,14 +29,9 @@ public abstract class AbstractController<T, E> implements RestController<T, E> {
 
     @Override
     @GetMapping
-    public ResponseEntity<List<E>> findAll() {
-        List<T> result = this.getService().findAll();
-        List<E> response = result.stream()
-                .map(entity -> modelMapper.map(entity, getDtoClass()))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(response);
+    public ResponseEntity<PageableResource<E>> list(HttpServletResponse response, Map<String, String> allRequestParams) {
+        return ResponseEntity.ok(toPageableResource( this.getService(),response, allRequestParams));
     }
-
 
     @GetMapping("/pagination")
     public Page<T> getUsers(@RequestParam(value = "offset", required = false) Integer offset,
