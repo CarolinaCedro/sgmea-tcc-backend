@@ -41,6 +41,8 @@ public abstract class AbstractService<T> implements Rest<T> {
         }
     }
 
+
+
     @Override
     public void delete(String id) {
         Optional<T> existingResource = this.getRepository().findById(id);

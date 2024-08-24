@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UuidGenerator;
 import tcc.sgmeabackend.model.enums.Prioridade;
 import tcc.sgmeabackend.model.enums.Status;
@@ -12,15 +14,14 @@ import tcc.sgmeabackend.model.enums.Status;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChamadoCriado implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
-
     @Id
     @UuidGenerator
     private String id;
@@ -35,6 +36,7 @@ public class ChamadoCriado implements Serializable {
     private Status status;
 
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "equipamento_id")
     private Equipamento equipamento;
 
@@ -43,6 +45,7 @@ public class ChamadoCriado implements Serializable {
     private String observacoes;
 
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "funcionario_id")
     private Funcionario funcionario;
 }

@@ -87,6 +87,13 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
         return super.create(resource);
     }
 
+    @GetMapping("/chamados-encerrados")
+    public ResponseEntity<List<ChamadoCriado>> chamadosEncerrados() {
+        List<ChamadoCriado> chamados = this.service.getChamadosEncerrados();
+        return ResponseEntity.ok(chamados);
+    }
+
+
 
     @Override
     protected Class<ChamadoCriadoResponse> getDtoClass() {

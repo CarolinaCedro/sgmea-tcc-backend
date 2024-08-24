@@ -21,13 +21,12 @@ public class Funcionario extends User {
     private String funcao;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "funcionario", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "funcionario", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChamadoCriado> chamadoCriados = new ArrayList<>();
 
     public Funcionario() {
         super();
     }
-
 
 
 }

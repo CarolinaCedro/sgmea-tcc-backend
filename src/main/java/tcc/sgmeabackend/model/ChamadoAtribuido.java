@@ -4,9 +4,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UuidGenerator;
 
-import java.io.Serial;
 import java.io.Serializable;
 
 @Table
@@ -15,9 +16,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChamadoAtribuido implements Serializable {
-
-    @Serial
-    private static final long serialVersionUID = 1L;
 
     @Id
     @UuidGenerator
@@ -28,10 +26,12 @@ public class ChamadoAtribuido implements Serializable {
     private ChamadoCriado chamadoCriado;
 
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "tecnico_id")
     private Tecnico tecnico;
 
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "gestor_id")
     private Gestor gestor;
 }

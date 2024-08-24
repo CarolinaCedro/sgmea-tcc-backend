@@ -9,6 +9,7 @@ import tcc.sgmeabackend.model.Gestor;
 import tcc.sgmeabackend.model.Tecnico;
 import tcc.sgmeabackend.model.dtos.ChamadoAtribuidoDto;
 import tcc.sgmeabackend.model.dtos.ChamadoConsolidado;
+import tcc.sgmeabackend.model.dtos.ChamadoCriadoResponse;
 import tcc.sgmeabackend.model.enums.Status;
 import tcc.sgmeabackend.repository.ChamadoAtribuidoRepository;
 import tcc.sgmeabackend.repository.ChamadoCriadoRepository;
@@ -16,6 +17,7 @@ import tcc.sgmeabackend.repository.GestorRepository;
 import tcc.sgmeabackend.repository.TecnicoRepository;
 import tcc.sgmeabackend.service.AbstractService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -42,6 +44,13 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
     protected JpaRepository<ChamadoCriado, String> getRepository() {
         return chamadoCriadoRepository;
     }
+
+
+    public List<ChamadoCriado> getChamadosEncerrados() {
+        // Aqui você implementa a lógica para buscar apenas os chamados encerrados
+        return chamadoCriadoRepository.findByStatus(Status.ENCERRADO);
+    }
+
 
 
     public ChamadoAtribuido atribuirChamado(ChamadoAtribuidoDto chamadoAtribuidoResponse) {
