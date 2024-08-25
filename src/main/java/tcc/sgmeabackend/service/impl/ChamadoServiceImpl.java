@@ -52,7 +52,6 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
     }
 
 
-
     public ChamadoAtribuido atribuirChamado(ChamadoAtribuidoDto chamadoAtribuidoResponse) {
         ChamadoCriado chamadoCriado = chamadoCriadoRepository.findById(chamadoAtribuidoResponse.chamadoId()).orElseThrow();
         Tecnico tecnico = tecnicoRepository.findById(chamadoAtribuidoResponse.tecnicoId()).orElseThrow();
@@ -89,8 +88,6 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
             this.create(existente);
 
 
-
-
             //Ajustar o retorno com o dto adequado
             return null;
         }
@@ -99,4 +96,7 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
     }
 
 
+    public List findAllByStatusNot(Status status) {
+        return this.chamadoCriadoRepository.findAllByStatusNot(status);
+    }
 }

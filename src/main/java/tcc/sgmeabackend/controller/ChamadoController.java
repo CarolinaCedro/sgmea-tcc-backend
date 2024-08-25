@@ -1,25 +1,26 @@
 package tcc.sgmeabackend.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
-import tcc.sgmeabackend.model.ChamadoAtribuido;
-import tcc.sgmeabackend.model.ChamadoCriado;
-import tcc.sgmeabackend.model.Funcionario;
-import tcc.sgmeabackend.model.Gestor;
+import tcc.sgmeabackend.model.*;
 import tcc.sgmeabackend.model.dtos.ChamadoAtribuidoDto;
 import tcc.sgmeabackend.model.dtos.ChamadoConsolidado;
 import tcc.sgmeabackend.model.dtos.ChamadoCriadoResponse;
+import tcc.sgmeabackend.model.enums.Status;
 import tcc.sgmeabackend.repository.ChamadoAtribuidoRepository;
 import tcc.sgmeabackend.service.AbstractService;
 import tcc.sgmeabackend.service.EmailService;
+import tcc.sgmeabackend.service.exceptions.ResourceNotFoundException;
 import tcc.sgmeabackend.service.impl.ChamadoServiceImpl;
 import tcc.sgmeabackend.service.impl.FuncionarioServiceImpl;
 import tcc.sgmeabackend.service.impl.GestorServiceImpl;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -53,6 +54,34 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
     public ResponseEntity<List<ChamadoAtribuido>> chamadoAtribuidos() {
         return ResponseEntity.ok(this.chamadoAtribuidoRepository.findAll());
     }
+
+    @Override
+    @GetMapping
+    public ResponseEntity<PageableResource<ChamadoCriadoResponse>> list(HttpServletResponse response, Map<String, String> allRequestParams) {
+        Status statusToExclude = Status.ENCERRADO;
+        return ResponseEntity.ok(toPageableResource(statusToExclude));
+    }
+
+
+    public PageableResource toPageableResource(final Status status) {
+        final List records = this.service.findAllByStatusNot(status);
+        return new PageableResource(records);
+    }
+
+    @Override
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable String id) {
+        Optional<ChamadoCriado> existingResource = this.service.findById(id);
+        if (existingResource.isPresent()) {
+            ChamadoCriado resource = existingResource.get();
+            // Supondo que há um método setStatus no seu modelo
+            resource.setStatus(Status.ENCERRADO);
+            this.service.create(resource);
+        } else {
+            throw new ResourceNotFoundException("Resource with id " + id + " not found");
+        }
+    }
+
 
     @PatchMapping("/consolidacao-chamado")
     public ResponseEntity<ChamadoConsolidado> consolidarChamado(@RequestBody ChamadoAtribuido chamadoCriado) {
@@ -92,7 +121,6 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
         List<ChamadoCriado> chamados = this.service.getChamadosEncerrados();
         return ResponseEntity.ok(chamados);
     }
-
 
 
     @Override
