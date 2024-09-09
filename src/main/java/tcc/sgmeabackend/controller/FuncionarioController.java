@@ -7,14 +7,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tcc.sgmeabackend.model.Funcionario;
-import tcc.sgmeabackend.model.dtos.FuncionarioResponse;
 import tcc.sgmeabackend.service.AbstractService;
 import tcc.sgmeabackend.service.impl.FuncionarioServiceImpl;
 import tcc.sgmeabackend.service.impl.GestorServiceImpl;
 
 @RestController
 @RequestMapping("api/sgmea/v1/funcionario")
-public class FuncionarioController extends AbstractController<Funcionario, FuncionarioResponse> {
+public class FuncionarioController extends AbstractController<Funcionario, Funcionario> {
 
     private final FuncionarioServiceImpl service;
     private final GestorServiceImpl gestorService;
@@ -31,12 +30,12 @@ public class FuncionarioController extends AbstractController<Funcionario, Funci
     }
 
     @Override
-    protected Class<FuncionarioResponse> getDtoClass() {
-        return FuncionarioResponse.class;
+    protected Class<Funcionario> getDtoClass() {
+        return Funcionario.class;
     }
 
     @Override
-    public ResponseEntity<FuncionarioResponse> create(@RequestBody Funcionario resource) {
+    public ResponseEntity<Funcionario> create(@RequestBody Funcionario resource) {
         if (resource.getSenha() != null && !resource.getSenha().isEmpty()) {
             String encryptedPassword = new BCryptPasswordEncoder().encode(resource.getSenha());
             resource.setSenha(encryptedPassword);

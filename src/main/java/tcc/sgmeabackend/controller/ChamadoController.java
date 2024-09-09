@@ -55,6 +55,7 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
         return ResponseEntity.ok(this.chamadoAtribuidoRepository.findAll());
     }
 
+
     @Override
     @GetMapping
     public ResponseEntity<PageableResource<ChamadoCriadoResponse>> list(HttpServletResponse response, Map<String, String> allRequestParams) {

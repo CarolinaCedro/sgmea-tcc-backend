@@ -6,6 +6,8 @@ import tcc.sgmeabackend.model.Gestor;
 import tcc.sgmeabackend.repository.GestorRepository;
 import tcc.sgmeabackend.service.AbstractService;
 
+import java.util.Optional;
+
 @Service
 public class GestorServiceImpl extends AbstractService<Gestor> {
 
@@ -15,6 +17,26 @@ public class GestorServiceImpl extends AbstractService<Gestor> {
         this.gestorRepository = gestorRepository;
     }
 
+
+    @Override
+    public Gestor update(String id, Gestor resource) {
+        Optional<Gestor> gestor = this.findById(id);
+        if (gestor.isPresent()) {
+            Gestor gest = gestor.get();
+            gest.setId(resource.getId());
+            gest.setGestor(resource.getGestor());
+            gest.setCpf(resource.getCpf());
+            gest.setSenha(resource.getSenha());
+            gest.setNome(resource.getNome());
+            gest.setEmail(resource.getEmail());
+            gest.setRole(resource.getRole());
+            gest.setAreaGestao(resource.getAreaGestao());
+            gest.setUsuariosAlocados(resource.getUsuariosAlocados());
+            gest.setChamadoAtribuidos(resource.getChamadoAtribuidos());
+            return this.gestorRepository.save(gest);
+        }
+        return null;
+    }
 
     @Override
     protected JpaRepository<Gestor, String> getRepository() {

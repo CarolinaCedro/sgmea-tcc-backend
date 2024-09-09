@@ -1,14 +1,17 @@
 package tcc.sgmeabackend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
+import tcc.sgmeabackend.model.jackson.desserializer.DepartamentoDesserializer;
+import tcc.sgmeabackend.model.jackson.serializer.DepartamentoSerializer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
+@Data
 @Entity
 public class Funcionario extends User {
 
@@ -16,6 +19,8 @@ public class Funcionario extends User {
 
     @ManyToOne
     @JoinColumn(name = "departamento_id")
+    @JsonSerialize(using = DepartamentoSerializer.class)
+    @JsonDeserialize(using = DepartamentoDesserializer.class)
     private Departamento departamento;
 
     private String funcao;

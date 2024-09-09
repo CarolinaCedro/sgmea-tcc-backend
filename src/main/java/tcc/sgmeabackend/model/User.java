@@ -1,5 +1,8 @@
 package tcc.sgmeabackend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -8,6 +11,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import tcc.sgmeabackend.model.enums.UserRole;
+import tcc.sgmeabackend.model.jackson.desserializer.GestorDesserializer;
+import tcc.sgmeabackend.model.jackson.serializer.GestorSerializer;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -36,23 +41,28 @@ public class User implements UserDetails {
 
 
     // Campo para armazenar o token de recuperação de senha
+    @JsonIgnore
     private String resetToken;
 
     // Campo para armazenar a data de expiração do token
+    @JsonIgnore
     private LocalDateTime resetTokenExpiryDate;
 
     @ManyToOne
     @JoinColumn(name = "gestor_id")
+    @JsonSerialize(using = GestorSerializer.class)
+    @JsonDeserialize(using = GestorDesserializer.class)
     private Gestor gestor;
 
     @Enumerated(EnumType.STRING)
     private Perfil perfil;
 
 
+    @JsonIgnore
     private String senha;
 
+    @JsonIgnore
     private UserRole role;
-
 
 
     public User(String id, String nome, String cpf, String email, String senha, UserRole role, Perfil perfil) {
@@ -102,33 +112,38 @@ public class User implements UserDetails {
 
 
     @Override
+    @JsonIgnore
     public String getPassword() {
         return senha;
     }
 
 
-
     @Override
+    @JsonIgnore
     public String getUsername() {
         return nome;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return true;
     }

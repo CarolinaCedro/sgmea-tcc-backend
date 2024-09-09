@@ -34,13 +34,15 @@ public abstract class AbstractService<T> implements Rest<T> {
     @Override
     public T update(String id, T resource) {
         Optional<T> existingResource = this.getRepository().findById(id);
+        System.out.println("_________________________");
+        System.out.println("o resource para update " + existingResource);
         if (existingResource.isPresent()) {
+
             return this.getRepository().save(resource);
         } else {
             throw new ResourceNotFoundException("Resource with id " + id + " not found");
         }
     }
-
 
 
     @Override

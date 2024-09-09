@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractController<T, E> implements RestController<T, E> {
 
-    private final ModelMapper modelMapper;
+    public final ModelMapper modelMapper;
 
     protected AbstractController(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
@@ -66,7 +66,7 @@ public abstract class AbstractController<T, E> implements RestController<T, E> {
 
     @Override
     @PutMapping("/{id}")
-    public ResponseEntity<E> update(@PathVariable String id, @Valid @RequestBody T resource) {
+    public ResponseEntity<E> update(@PathVariable String id, @RequestBody T resource) {
         T updatedResource = this.getService().update(id, resource);
         E response = modelMapper.map(updatedResource, getDtoClass());
         return ResponseEntity.ok(response);

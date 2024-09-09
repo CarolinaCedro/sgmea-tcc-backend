@@ -96,6 +96,28 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
     }
 
 
+    @Override
+    public ChamadoCriado update(String id, ChamadoCriado resource) {
+        Optional<ChamadoCriado> chamadoCriado = this.findById(id);
+        if (chamadoCriado.isPresent()) {
+            ChamadoCriado chamado = chamadoCriado.get();
+            chamado.setId(id);
+            chamado.setPrioridade(resource.getPrioridade());
+            chamado.setStatus(resource.getStatus());
+            chamado.setEquipamento(resource.getEquipamento());
+            chamado.setTitulo(resource.getTitulo());
+            chamado.setDataFechamento(resource.getDataFechamento());
+            chamado.setObservacoes(resource.getObservacoes());
+            chamado.setFuncionario(resource.getFuncionario());
+            chamado.setDataAbertura(resource.getDataAbertura());
+            chamado.setObservacaoConsolidacao(resource.getObservacaoConsolidacao());
+            return this.chamadoCriadoRepository.save(chamado);
+
+
+        }
+        return null;
+    }
+
     public List findAllByStatusNot(Status status) {
         return this.chamadoCriadoRepository.findAllByStatusNot(status);
     }
