@@ -8,7 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import tcc.sgmeabackend.model.jackson.desserializer.ChamadoCriadoDesserializer;
 import tcc.sgmeabackend.model.jackson.desserializer.DepartamentoDesserializer;
+import tcc.sgmeabackend.model.jackson.serializer.ChamadoSerializer;
 import tcc.sgmeabackend.model.jackson.serializer.DepartamentoSerializer;
 
 import java.util.ArrayList;
@@ -33,6 +35,8 @@ public class Funcionario extends User {
 
     @JsonIgnore
     @OneToMany(mappedBy = "funcionario", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonSerialize(using = ChamadoSerializer.class)
+    @JsonDeserialize(using = ChamadoCriadoDesserializer.class)
     private List<ChamadoCriado> chamadoCriados = new ArrayList<>();
 
 

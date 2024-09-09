@@ -70,9 +70,10 @@ public class User implements UserDetails {
         this.cpf = cpf;
         this.email = email;
         this.senha = senha;
-        this.role = role;
+        this.role = UserRole.valueOf(perfil.name());
         this.perfil = perfil;
     }
+
 
     @Override
     @JsonIgnore

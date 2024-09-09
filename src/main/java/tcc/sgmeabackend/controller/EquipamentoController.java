@@ -12,7 +12,7 @@ import tcc.sgmeabackend.service.impl.EquipamentoServiceImpl;
 @RestController
 @PermitAll
 @RequestMapping("api/sgmea/v1/equipamento")
-public class EquipamentoController extends AbstractController<Equipamento, EquipamentoResponse> {
+public class EquipamentoController extends AbstractController<Equipamento, Equipamento> {
 
     private final EquipamentoServiceImpl service;
 
@@ -22,8 +22,8 @@ public class EquipamentoController extends AbstractController<Equipamento, Equip
     }
 
     @Override
-    protected Class<EquipamentoResponse> getDtoClass() {
-        return EquipamentoResponse.class;
+    protected Class<Equipamento> getDtoClass() {
+        return Equipamento.class;
     }
 
     @Override

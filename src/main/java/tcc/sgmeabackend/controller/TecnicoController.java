@@ -15,7 +15,7 @@ import tcc.sgmeabackend.service.impl.TecnicoServiceImpl;
 @RestController
 @PermitAll
 @RequestMapping("api/sgmea/v1/tecnico")
-public class TecnicoController extends AbstractController<Tecnico, TecnicoResponse> {
+public class TecnicoController extends AbstractController<Tecnico, Tecnico> {
 
     private final TecnicoServiceImpl service;
 
@@ -31,12 +31,12 @@ public class TecnicoController extends AbstractController<Tecnico, TecnicoRespon
     }
 
     @Override
-    protected Class<TecnicoResponse> getDtoClass() {
-        return TecnicoResponse.class;
+    protected Class<Tecnico> getDtoClass() {
+        return Tecnico.class;
     }
 
     @Override
-    public ResponseEntity<TecnicoResponse> create(@RequestBody Tecnico resource) {
+    public ResponseEntity<Tecnico> create(@RequestBody Tecnico resource) {
         if (resource.getSenha() != null && !resource.getSenha().isEmpty()) {
             String encryptedPassword = new BCryptPasswordEncoder().encode(resource.getSenha());
             resource.setSenha(encryptedPassword);

@@ -7,13 +7,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tcc.sgmeabackend.model.Gestor;
-import tcc.sgmeabackend.model.dtos.GestorResponse;
 import tcc.sgmeabackend.service.AbstractService;
 import tcc.sgmeabackend.service.impl.GestorServiceImpl;
 
 @RestController
 @RequestMapping("api/sgmea/v1/gestor")
-public class GestorController extends AbstractController<Gestor, GestorResponse> {
+public class GestorController extends AbstractController<Gestor, Gestor> {
 
     private final GestorServiceImpl service;
 
@@ -23,8 +22,8 @@ public class GestorController extends AbstractController<Gestor, GestorResponse>
     }
 
     @Override
-    protected Class<GestorResponse> getDtoClass() {
-        return GestorResponse.class;
+    protected Class<Gestor> getDtoClass() {
+        return Gestor.class;
     }
 
     @Override
@@ -34,7 +33,7 @@ public class GestorController extends AbstractController<Gestor, GestorResponse>
 
 
     @Override
-    public ResponseEntity<GestorResponse> create(@RequestBody Gestor resource) {
+    public ResponseEntity<Gestor> create(@RequestBody Gestor resource) {
         if (resource.getSenha() != null && !resource.getSenha().isEmpty()) {
             String encryptedPassword = new BCryptPasswordEncoder().encode(resource.getSenha());
             resource.setSenha(encryptedPassword);

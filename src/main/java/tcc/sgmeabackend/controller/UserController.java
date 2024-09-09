@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import tcc.sgmeabackend.model.User;
 import tcc.sgmeabackend.model.dtos.ResetPasswordRequest;
 import tcc.sgmeabackend.model.dtos.UserForgotPasswordRequestDto;
-import tcc.sgmeabackend.model.dtos.UserResponseDto;
 import tcc.sgmeabackend.repository.UserRepository;
 import tcc.sgmeabackend.service.AbstractService;
 import tcc.sgmeabackend.service.impl.UserServiceImpl;
@@ -20,7 +19,7 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("api/sgmea/v1/users")
-public class UserController extends AbstractController<User, UserResponseDto> {
+public class UserController extends AbstractController<User, User> {
 
     private final UserServiceImpl service;
     private final UserRepository userRepository;
@@ -32,8 +31,8 @@ public class UserController extends AbstractController<User, UserResponseDto> {
     }
 
     @Override
-    protected Class<UserResponseDto> getDtoClass() {
-        return UserResponseDto.class;
+    protected Class<User> getDtoClass() {
+        return User.class;
     }
 
     @Override

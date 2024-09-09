@@ -17,7 +17,7 @@ import java.io.Serializable;
 public class Especialidade implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private String id;
 
     private String nome;
     private String descricao;

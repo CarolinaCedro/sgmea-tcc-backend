@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import tcc.sgmeabackend.model.*;
 import tcc.sgmeabackend.model.dtos.ChamadoAtribuidoDto;
 import tcc.sgmeabackend.model.dtos.ChamadoConsolidado;
-import tcc.sgmeabackend.model.dtos.ChamadoCriadoResponse;
 import tcc.sgmeabackend.model.enums.Status;
 import tcc.sgmeabackend.repository.ChamadoAtribuidoRepository;
 import tcc.sgmeabackend.service.AbstractService;
@@ -25,7 +24,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("api/sgmea/v1/chamado")
-public class ChamadoController extends AbstractController<ChamadoCriado, ChamadoCriadoResponse> {
+public class ChamadoController extends AbstractController<ChamadoCriado, ChamadoCriado> {
 
     private final ChamadoServiceImpl service;
 
@@ -58,7 +57,7 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
 
     @Override
     @GetMapping
-    public ResponseEntity<PageableResource<ChamadoCriadoResponse>> list(HttpServletResponse response, Map<String, String> allRequestParams) {
+    public ResponseEntity<PageableResource<ChamadoCriado>> list(HttpServletResponse response, Map<String, String> allRequestParams) {
         Status statusToExclude = Status.ENCERRADO;
         return ResponseEntity.ok(toPageableResource(statusToExclude));
     }
@@ -92,13 +91,13 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
 
 
     @Override
-    public ResponseEntity<ChamadoCriadoResponse> create(@RequestBody ChamadoCriado resource) {
+    public ResponseEntity<ChamadoCriado> create(@RequestBody ChamadoCriado resource) {
         String funcionarioId = resource.getFuncionario().getId();
         Optional<Funcionario> funcionarioOpt = funcionarioService.findById(funcionarioId);
 
         if (funcionarioOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ChamadoCriadoResponse("Funcionário não encontrado"));
+                    .body(new ChamadoCriado("Funcionário não encontrado"));
         }
 
         Funcionario funcionario = funcionarioOpt.get();
@@ -107,7 +106,7 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
 
         if (gestorOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ChamadoCriadoResponse("Funcionário não encontrado"));
+                    .body(new ChamadoCriado("Funcionário não encontrado"));
         }
 
         Gestor gestor = gestorOpt.get();
@@ -125,8 +124,8 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
 
 
     @Override
-    protected Class<ChamadoCriadoResponse> getDtoClass() {
-        return ChamadoCriadoResponse.class;
+    protected Class<ChamadoCriado> getDtoClass() {
+        return ChamadoCriado.class;
     }
 
     @Override
