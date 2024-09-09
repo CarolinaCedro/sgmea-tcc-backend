@@ -11,14 +11,10 @@ public class DepartamentoSerializer extends JsonSerializer<Departamento> {
 
     @Override
     public void serialize(final Departamento departamento, final JsonGenerator jsonGenerator, final SerializerProvider serializerProvider) throws IOException {
-        jsonGenerator.writeStartObject();
-
-        // Serializa as propriedades individuais de Departamento
-        if (departamento.getId() != null) {
-            jsonGenerator.writeStringField("id", departamento.getId());  // Exemplo de propriedade id
+        if (departamento != null && departamento.getId() != null) {
+            jsonGenerator.writeString(departamento.getId());
+        } else {
+            jsonGenerator.writeNull();
         }
-
-
-        jsonGenerator.writeEndObject();
     }
 }

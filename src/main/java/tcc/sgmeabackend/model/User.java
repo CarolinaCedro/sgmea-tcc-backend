@@ -58,10 +58,9 @@ public class User implements UserDetails {
     private Perfil perfil;
 
 
-    @JsonIgnore
     private String senha;
 
-    @JsonIgnore
+
     private UserRole role;
 
 
@@ -76,6 +75,7 @@ public class User implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.role == UserRole.ADMIN) {
             return List.of(
