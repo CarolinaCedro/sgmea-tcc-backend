@@ -44,7 +44,7 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
     }
 
     @PostMapping("/atribuir-chamado")
-    public void atribuirChamado(@RequestBody ChamadoAtribuidoDto chamadoAtribuidoDto) {
+    public void atribuirChamado(@RequestBody ChamadoAtribuido chamadoAtribuidoDto) {
         this.service.atribuirChamado(chamadoAtribuidoDto);
 
     }

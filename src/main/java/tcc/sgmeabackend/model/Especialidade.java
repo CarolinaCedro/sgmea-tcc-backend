@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.io.Serializable;
 
@@ -15,8 +16,9 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Especialidade implements Serializable {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @UuidGenerator
     private String id;
 
     private String nome;

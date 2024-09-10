@@ -48,6 +48,7 @@ public class User implements UserDetails {
     @JsonIgnore
     private LocalDateTime resetTokenExpiryDate;
 
+
     @ManyToOne
     @JoinColumn(name = "gestor_id")
     @JsonSerialize(using = GestorSerializer.class)
@@ -70,7 +71,7 @@ public class User implements UserDetails {
         this.cpf = cpf;
         this.email = email;
         this.senha = senha;
-        this.role = UserRole.valueOf(perfil.name());
+        this.role = role;
         this.perfil = perfil;
     }
 

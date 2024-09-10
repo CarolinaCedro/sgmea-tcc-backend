@@ -27,7 +27,6 @@ public class Gestor extends User {
 
     @JsonIgnore
     @OneToMany(mappedBy = "gestor", fetch = FetchType.EAGER)
-
     @JsonSerialize(using = ChamadoAtribuidoSerializer.class)
     @JsonDeserialize(using = ChamadoAtribuidoDesserializer.class)
     private List<ChamadoAtribuido> chamadoAtribuidos = new ArrayList<>();

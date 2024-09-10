@@ -17,7 +17,7 @@ public class FuncionarioSerializer extends JsonSerializer<Funcionario> {
         if (funcionario != null && funcionario.getId() != null) {
             jsonGenerator.writeString(funcionario.getId());
         } else {
-            jsonGenerator.writeNull();  // Se o gestor for nulo, escreve "null"
+            jsonGenerator.writeNull();
         }
     }
 }

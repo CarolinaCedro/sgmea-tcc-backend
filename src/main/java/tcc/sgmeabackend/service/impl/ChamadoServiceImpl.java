@@ -7,9 +7,7 @@ import tcc.sgmeabackend.model.ChamadoAtribuido;
 import tcc.sgmeabackend.model.ChamadoCriado;
 import tcc.sgmeabackend.model.Gestor;
 import tcc.sgmeabackend.model.Tecnico;
-import tcc.sgmeabackend.model.dtos.ChamadoAtribuidoDto;
 import tcc.sgmeabackend.model.dtos.ChamadoConsolidado;
-import tcc.sgmeabackend.model.dtos.ChamadoCriadoResponse;
 import tcc.sgmeabackend.model.enums.Status;
 import tcc.sgmeabackend.repository.ChamadoAtribuidoRepository;
 import tcc.sgmeabackend.repository.ChamadoCriadoRepository;
@@ -52,12 +50,12 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
     }
 
 
-    public ChamadoAtribuido atribuirChamado(ChamadoAtribuidoDto chamadoAtribuidoResponse) {
-        ChamadoCriado chamadoCriado = chamadoCriadoRepository.findById(chamadoAtribuidoResponse.chamadoId()).orElseThrow();
-        Tecnico tecnico = tecnicoRepository.findById(chamadoAtribuidoResponse.tecnicoId()).orElseThrow();
-        Gestor gestor = gestorRepository.findById(chamadoAtribuidoResponse.gestorId()).orElseThrow();
+    public ChamadoAtribuido atribuirChamado(ChamadoAtribuido chamadoAtribuidoResponse) {
+        ChamadoCriado chamadoCriado = chamadoCriadoRepository.findById(chamadoAtribuidoResponse.getChamadoCriado().getId()).orElseThrow();
+        Tecnico tecnico = tecnicoRepository.findById(chamadoAtribuidoResponse.getTecnico().getId()).orElseThrow();
+        Gestor gestor = gestorRepository.findById(chamadoAtribuidoResponse.getGestor().getId()).orElseThrow();
 
-        chamadoCriado.setPrioridade(chamadoAtribuidoResponse.prioridade());
+        chamadoCriado.setPrioridade(chamadoAtribuidoResponse.getChamadoCriado().getPrioridade());
         chamadoCriado.setStatus(Status.ANDAMENTO);
         ChamadoAtribuido chamadoAtribuido = new ChamadoAtribuido();
         chamadoAtribuido.setChamadoCriado(chamadoCriado);
