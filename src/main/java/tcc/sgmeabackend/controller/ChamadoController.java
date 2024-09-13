@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 import tcc.sgmeabackend.model.*;
-import tcc.sgmeabackend.model.dtos.ChamadoAtribuidoDto;
 import tcc.sgmeabackend.model.dtos.ChamadoConsolidado;
 import tcc.sgmeabackend.model.enums.Status;
 import tcc.sgmeabackend.repository.ChamadoAtribuidoRepository;
@@ -52,6 +51,11 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
     @GetMapping("/chamados-atribuidos")
     public ResponseEntity<List<ChamadoAtribuido>> chamadoAtribuidos() {
         return ResponseEntity.ok(this.chamadoAtribuidoRepository.findAll());
+    }
+
+    @GetMapping("/chamados-atribuidos/{id}")
+    public ResponseEntity<Optional<ChamadoAtribuido>> chamadoAtribuidoById(@PathVariable String id) {
+        return ResponseEntity.ok(this.chamadoAtribuidoRepository.findById(id));
     }
 
 

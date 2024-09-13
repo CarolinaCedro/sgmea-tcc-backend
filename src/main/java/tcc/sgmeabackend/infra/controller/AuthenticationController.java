@@ -8,11 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailSendException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tcc.sgmeabackend.infra.security.TokenService;
 import tcc.sgmeabackend.model.User;
 import tcc.sgmeabackend.model.dtos.AuthenticationDto;
@@ -65,20 +64,17 @@ public class AuthenticationController {
     }
 
 
-//    @PostMapping("/sendEmail/test")
-//    public ResponseEntity sendEmail(@RequestBody @Valid EmailDto data) {
-//
-//
-//        return ResponseEntity.ok(
-//                this.emailService.enviarEmailTexto(
-//                        data.destinatario(),
-//                        data.assunto(),
-//                        data.mensagem()
-//                )
-//        );
-//
-//
-//    }
+    @GetMapping("/me")
+    public ResponseEntity<User> getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof User) {
+            User currentUser = (User) authentication.getPrincipal();
+            return ResponseEntity.ok(currentUser);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+
 
 }
 

@@ -12,5 +12,6 @@ import java.util.List;
 public interface ChamadoCriadoRepository extends JpaRepository<ChamadoCriado, String> {
     List<ChamadoCriado> findByStatus(Status fechado);
 
-    List findAllByStatusNot(Status status);
+    List<ChamadoCriado> findAllByStatusNotAndAlocadoIsFalse(Status status);
+
 }

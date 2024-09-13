@@ -41,6 +41,8 @@ public class ChamadoCriado implements Serializable {
     private Prioridade prioridade;
     private Status status;
 
+    private boolean alocado;
+
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "equipamento_id")

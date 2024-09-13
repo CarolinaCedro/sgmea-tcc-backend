@@ -50,6 +50,9 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
     }
 
 
+
+
+
     public ChamadoAtribuido atribuirChamado(ChamadoAtribuido chamadoAtribuidoResponse) {
         ChamadoCriado chamadoCriado = chamadoCriadoRepository.findById(chamadoAtribuidoResponse.getChamadoCriado().getId()).orElseThrow();
         Tecnico tecnico = tecnicoRepository.findById(chamadoAtribuidoResponse.getTecnico().getId()).orElseThrow();
@@ -106,6 +109,7 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
             chamado.setTitulo(resource.getTitulo());
             chamado.setDataFechamento(resource.getDataFechamento());
             chamado.setObservacoes(resource.getObservacoes());
+            chamado.setAlocado(resource.isAlocado());
             chamado.setFuncionario(resource.getFuncionario());
             chamado.setDataAbertura(resource.getDataAbertura());
             chamado.setObservacaoConsolidacao(resource.getObservacaoConsolidacao());
@@ -117,6 +121,6 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
     }
 
     public List findAllByStatusNot(Status status) {
-        return this.chamadoCriadoRepository.findAllByStatusNot(status);
+        return this.chamadoCriadoRepository.findAllByStatusNotAndAlocadoIsFalse(status);
     }
 }
