@@ -2,6 +2,7 @@ package tcc.sgmeabackend.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tcc.sgmeabackend.model.MetadataPageable;
@@ -18,6 +19,9 @@ import java.util.Optional;
 public interface RestController<T, E> {
 
     ResponseEntity<PageableResource<E>> list(HttpServletResponse response, @RequestParam Map<String, String> allRequestParams);
+
+    @GetMapping(value = "/ids")
+    ResponseEntity findByIds(@RequestParam(required = false, value = "ids") String[] ids);
 
     ResponseEntity<Optional<E>> findById(String id);
 

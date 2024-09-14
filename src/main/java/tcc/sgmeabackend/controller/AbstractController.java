@@ -12,10 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import tcc.sgmeabackend.model.PageableResource;
 import tcc.sgmeabackend.service.AbstractService;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 public abstract class AbstractController<T, E> implements RestController<T, E> {
 
@@ -41,6 +40,14 @@ public abstract class AbstractController<T, E> implements RestController<T, E> {
         if (null == pageSize) pageSize = 10;
         if (StringUtils.isEmpty(sortBy)) sortBy = "id";
         return this.getService().findAllPagination(PageRequest.of(offset, pageSize, Sort.by(sortBy)));
+    }
+
+    @Override
+    @GetMapping(value = "/ids")
+    public ResponseEntity findByIds(@RequestParam(required = false, value = "ids") String[] ids) {
+        final Set<T> value = this.getService().findByIds(ids);
+
+        return ResponseEntity.ok(value);
     }
 
 

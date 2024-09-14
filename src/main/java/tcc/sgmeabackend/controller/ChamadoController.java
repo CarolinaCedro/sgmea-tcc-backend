@@ -48,14 +48,16 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
 
     }
 
-    @GetMapping("/chamados-atribuidos")
-    public ResponseEntity<List<ChamadoAtribuido>> chamadoAtribuidos() {
-        return ResponseEntity.ok(this.chamadoAtribuidoRepository.findAll());
-    }
 
     @GetMapping("/chamados-atribuidos/{id}")
-    public ResponseEntity<Optional<ChamadoAtribuido>> chamadoAtribuidoById(@PathVariable String id) {
-        return ResponseEntity.ok(this.chamadoAtribuidoRepository.findById(id));
+    public ResponseEntity<Optional<ChamadoCriado>> chamadoAtribuidoById(@PathVariable String id) {
+        return ResponseEntity.ok(this.service.findById(id));
+    }
+
+    @GetMapping("/chamados-atribuidos")
+    public ResponseEntity<PageableResource<ChamadoAtribuido>> chamadoAtribuidos() {
+        Status statusToExclude = Status.CONCLUIDO;
+        return ResponseEntity.ok(toPageableResource(statusToExclude));
     }
 
 
@@ -87,12 +89,15 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
     }
 
 
-    @PatchMapping("/consolidacao-chamado")
-    public ResponseEntity<ChamadoConsolidado> consolidarChamado(@RequestBody ChamadoAtribuido chamadoCriado) {
+    @PutMapping("/consolidacao-chamado/{id}")
+    public ResponseEntity<ChamadoConsolidado> consolidarChamado(@PathVariable String id, @RequestBody String observacaoConsolidacao) {
+        ChamadoConsolidado consolidado = this.service.consolidarChamado(id, observacaoConsolidacao);
 
-        return ResponseEntity.ok(this.service.consolidarChamado(chamadoCriado));
+        if (consolidado == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(consolidado);
     }
-
 
     @Override
     public ResponseEntity<ChamadoCriado> create(@RequestBody ChamadoCriado resource) {

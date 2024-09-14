@@ -8,6 +8,7 @@ import tcc.sgmeabackend.model.ChamadoCriado;
 import tcc.sgmeabackend.model.Gestor;
 import tcc.sgmeabackend.model.Tecnico;
 import tcc.sgmeabackend.model.dtos.ChamadoConsolidado;
+import tcc.sgmeabackend.model.enums.Prioridade;
 import tcc.sgmeabackend.model.enums.Status;
 import tcc.sgmeabackend.repository.ChamadoAtribuidoRepository;
 import tcc.sgmeabackend.repository.ChamadoCriadoRepository;
@@ -15,6 +16,8 @@ import tcc.sgmeabackend.repository.GestorRepository;
 import tcc.sgmeabackend.repository.TecnicoRepository;
 import tcc.sgmeabackend.service.AbstractService;
 
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,12 +48,11 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
 
 
     public List<ChamadoCriado> getChamadosEncerrados() {
-        // Aqui você implementa a lógica para buscar apenas os chamados encerrados
-        return chamadoCriadoRepository.findByStatus(Status.ENCERRADO);
+        // Cria uma lista com os status ENCERRADO e CONCLUIDO
+        List<Status> statusEncerrados = Arrays.asList(Status.ENCERRADO, Status.CONCLUIDO);
+
+        return chamadoCriadoRepository.findByStatusIn(statusEncerrados);
     }
-
-
-
 
 
     public ChamadoAtribuido atribuirChamado(ChamadoAtribuido chamadoAtribuidoResponse) {
@@ -68,29 +70,63 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
         return chamadoAtribuidoRepository.save(chamadoAtribuido);
     }
 
-    public ChamadoConsolidado consolidarChamado(ChamadoAtribuido chamadoAtribuido) {
-        String idChamado = chamadoAtribuido.getChamadoCriado().getId();
-        Optional<ChamadoCriado> criado = this.findById(idChamado);
-        if (criado.isPresent()) {
-            ChamadoCriado existente = criado.get();
-            ChamadoCriado chamadoCriado = chamadoAtribuido.getChamadoCriado();
+    public ChamadoConsolidado consolidarChamado(String id, String observacaoConsolidacao) {
+        Optional<ChamadoAtribuido> chamadoAtribuidoOpt = this.chamadoAtribuidoRepository.findById(id);
 
-            // Atualizando apenas os campos fornecidos no payload
-            if (chamadoCriado.getDataFechamento() != null) {
-                existente.setDataFechamento(chamadoCriado.getDataFechamento());
+        if (chamadoAtribuidoOpt.isPresent()) {
+            ChamadoAtribuido chamadoAtribuido = chamadoAtribuidoOpt.get();
+
+            Optional<ChamadoCriado> chamadoCriadoOpt = this.chamadoCriadoRepository.findById(chamadoAtribuido.getChamadoCriado().getId());
+            if (chamadoCriadoOpt.isPresent()) {
+
+                ChamadoCriado chamadoCriado = chamadoCriadoOpt.get();
+
+                if (chamadoCriado.getStatus() == null) {
+                    chamadoCriado.setStatus(Status.CONCLUIDO);
+                }
+
+                chamadoCriado.setStatus(Status.CONCLUIDO);
+
+
+                if (chamadoCriado.getPrioridade() == null) {
+                    chamadoCriado.setPrioridade(Prioridade.MEDIA);
+                }
+
+
+                LocalDate dataFechamento = LocalDate.now();
+                chamadoCriado.setDataFechamento(dataFechamento);
+
+                // Verifica e define observação de consolidação
+                if (observacaoConsolidacao == null || observacaoConsolidacao.isEmpty()) {
+                    observacaoConsolidacao = "Não informado observações de consolidação";
+                }
+                chamadoCriado.setObservacaoConsolidacao(observacaoConsolidacao);
+
+
+                // Salva as alterações no banco de dados
+                try {
+                    this.chamadoCriadoRepository.save(chamadoCriado);
+                } catch (Exception e) {
+                    throw new RuntimeException("Erro ao salvar chamado criado: " + e.getMessage());
+                }
+
+                // Cria e popula o ChamadoConsolidado
+                ChamadoConsolidado consolidado = new ChamadoConsolidado();
+                consolidado.setId(chamadoCriado.getId());
+                consolidado.setDataAbertura(chamadoCriado.getDataAbertura());
+                consolidado.setDataFechamento(chamadoCriado.getDataFechamento());
+                consolidado.setPrioridade(chamadoCriado.getPrioridade());
+                consolidado.setStatus(chamadoCriado.getStatus().toString());
+                consolidado.setEquipamento(chamadoCriado.getEquipamento());
+                consolidado.setTitulo(chamadoCriado.getTitulo());
+                consolidado.setObservacaoConsolidacao(chamadoCriado.getObservacaoConsolidacao());
+                consolidado.setObservacoes(chamadoCriado.getObservacoes());
+                consolidado.setFuncionario(chamadoCriado.getFuncionario());
+                consolidado.setGestor(chamadoAtribuido.getGestor());
+                consolidado.setTecnico(chamadoAtribuido.getTecnico());
+
+                return consolidado;
             }
-            if (chamadoCriado.getStatus() != null) {
-                existente.setStatus(chamadoCriado.getStatus());
-            }
-            if (chamadoCriado.getObservacaoConsolidacao() != null) {
-                existente.setObservacaoConsolidacao(chamadoCriado.getObservacaoConsolidacao());
-            }
-
-            this.create(existente);
-
-
-            //Ajustar o retorno com o dto adequado
-            return null;
         }
 
         return null;
