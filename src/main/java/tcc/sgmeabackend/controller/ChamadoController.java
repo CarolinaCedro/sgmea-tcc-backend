@@ -68,6 +68,12 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
         return ResponseEntity.ok(toPageableResource(statusToExclude));
     }
 
+    @GetMapping("/chamados-encerrados")
+    public ResponseEntity<PageableResource<ChamadoCriado>> chamadosEncerrados() {
+        List<ChamadoCriado> chamados = this.service.getChamadosEncerrados();
+        return ResponseEntity.ok(new PageableResource(chamados));
+    }
+
 
     public PageableResource toPageableResource(final Status status) {
         final List records = this.service.findAllByStatusNot(status);
@@ -123,12 +129,6 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
 
 
         return super.create(resource);
-    }
-
-    @GetMapping("/chamados-encerrados")
-    public ResponseEntity<List<ChamadoCriado>> chamadosEncerrados() {
-        List<ChamadoCriado> chamados = this.service.getChamadosEncerrados();
-        return ResponseEntity.ok(chamados);
     }
 
 
