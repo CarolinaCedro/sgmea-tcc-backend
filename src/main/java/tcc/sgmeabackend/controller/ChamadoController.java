@@ -20,6 +20,7 @@ import tcc.sgmeabackend.service.impl.GestorServiceImpl;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/sgmea/v1/chamado")
@@ -27,15 +28,19 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
 
     private final ChamadoServiceImpl service;
 
+    public final ModelMapper modelMapper;
+
+
     private final ChamadoAtribuidoRepository chamadoAtribuidoRepository;
     private final GestorServiceImpl gestorService;
     private final FuncionarioServiceImpl funcionarioService;
 
     private final EmailService emailService;
 
-    public ChamadoController(ChamadoServiceImpl service, ModelMapper modelMapper, ChamadoAtribuidoRepository chamadoAtribuidoRepository, GestorServiceImpl gestorService, FuncionarioServiceImpl funcionarioService, EmailService emailService) {
+    public ChamadoController(ChamadoServiceImpl service, ModelMapper modelMapper, ModelMapper modelMapper1, ChamadoAtribuidoRepository chamadoAtribuidoRepository, GestorServiceImpl gestorService, FuncionarioServiceImpl funcionarioService, EmailService emailService) {
         super(modelMapper);
         this.service = service;
+        this.modelMapper = modelMapper1;
         this.chamadoAtribuidoRepository = chamadoAtribuidoRepository;
         this.gestorService = gestorService;
         this.funcionarioService = funcionarioService;
@@ -72,6 +77,19 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
     public ResponseEntity<PageableResource<ChamadoCriado>> chamadosEncerrados() {
         List<ChamadoCriado> chamados = this.service.getChamadosEncerrados();
         return ResponseEntity.ok(new PageableResource(chamados));
+    }
+
+    @GetMapping("/chamados-concluidos")
+    public ResponseEntity<PageableResource<ChamadoReportResponse>> chamadosConcluidos() {
+
+        List<ChamadoCriado> chamados = this.service.getChamadosConcluidos();
+
+        // Mapeando cada ChamadoCriado para ChamadoReportResponse
+        List<ChamadoReportResponse> chamadosResponse = chamados.stream()
+                .map(chamado -> modelMapper.map(chamado, ChamadoReportResponse.class))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(new PageableResource<>(chamadosResponse));
     }
 
 

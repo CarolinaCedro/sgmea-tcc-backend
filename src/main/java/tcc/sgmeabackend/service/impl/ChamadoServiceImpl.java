@@ -159,4 +159,9 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
     public List findAllByStatusNot(Status status) {
         return this.chamadoCriadoRepository.findAllByStatusNotAndAlocadoIsFalse(status);
     }
+
+    public List<ChamadoCriado> getChamadosConcluidos() {
+        Status statusConcluido = Status.CONCLUIDO;
+        return chamadoCriadoRepository.findByStatusInAndFetchEquipamento(statusConcluido);
+    }
 }

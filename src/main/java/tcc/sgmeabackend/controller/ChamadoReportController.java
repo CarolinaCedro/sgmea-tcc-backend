@@ -1,11 +1,12 @@
 package tcc.sgmeabackend.controller;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import jakarta.servlet.http.HttpServletResponse;
+import net.sf.jasperreports.engine.JRException;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tcc.sgmeabackend.model.ChamadoCriado;
 import tcc.sgmeabackend.service.impl.ChamadoReportServiceImpl;
+import tcc.sgmeabackend.service.impl.ChamadoServiceImpl;
 
 import java.io.IOException;
 
@@ -14,18 +15,17 @@ import java.io.IOException;
 public class ChamadoReportController {
 
     private final ChamadoReportServiceImpl chamadoReportService;
+    private final ChamadoServiceImpl chamadoService;
 
-    public ChamadoReportController(ChamadoReportServiceImpl chamadoReportService) {
+
+    public ChamadoReportController(ChamadoReportServiceImpl chamadoReportService, ChamadoServiceImpl chamadoService) {
         this.chamadoReportService = chamadoReportService;
+
+        this.chamadoService = chamadoService;
     }
 
-
-    @PostMapping("/gerar-report-chamado")
-    public void gerarReportChamado(@RequestBody ChamadoCriado chamado) throws IOException {
-        try {
-            this.chamadoReportService.gerar(chamado);
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
-        }
+    @GetMapping("/generated-report")
+    public void generateReport(HttpServletResponse response) throws IOException, JRException {
+        this.chamadoReportService.exportReport(response);
     }
 }
