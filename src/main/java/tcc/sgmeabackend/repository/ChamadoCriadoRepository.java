@@ -2,11 +2,15 @@ package tcc.sgmeabackend.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestBody;
 import tcc.sgmeabackend.model.ChamadoCriado;
 import tcc.sgmeabackend.model.dtos.ChamadoCriadoResponse;
+import tcc.sgmeabackend.model.dtos.ReportFilter;
 import tcc.sgmeabackend.model.enums.Status;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -15,9 +19,25 @@ public interface ChamadoCriadoRepository extends JpaRepository<ChamadoCriado, St
 
     List<ChamadoCriado> findByStatusIn(List<Status> status);
 
-    @Query("SELECT c FROM ChamadoCriado c JOIN FETCH c.equipamento e WHERE c.status IN :status ORDER BY c.dataAbertura ASC")
-    List<ChamadoCriado> findByStatusInAndFetchEquipamento(Status status);
+
+
+    @Query("SELECT c FROM ChamadoCriado c JOIN FETCH c.equipamento e " +
+            "WHERE c.status = :status " +
+            "AND (:dataAbertura IS NULL OR c.dataAbertura >= :dataAbertura) " +
+            "AND (:dataFechamento IS NULL OR c.dataAbertura <= :dataFechamento) " +
+            "AND (:nomeEquipamento IS NULL OR e.nome LIKE %:nomeEquipamento%) " +
+            "ORDER BY c.dataAbertura ASC")
+    List<ChamadoCriado> findByStatusAndOptionalFilters(
+            @Param("status") Status status,
+            @Param("dataAbertura") LocalDate dataAbertura,
+            @Param("dataFechamento") LocalDate dataFechamento,
+            @Param("nomeEquipamento") String nomeEquipamento);
+
+
+
 
     List<ChamadoCriado> findAllByStatusNotAndAlocadoIsFalse(Status status);
+
+    List<ChamadoCriado> findByStatus(Status statusConcluido);
 
 }

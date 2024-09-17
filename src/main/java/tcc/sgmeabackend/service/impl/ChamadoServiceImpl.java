@@ -8,6 +8,7 @@ import tcc.sgmeabackend.model.ChamadoCriado;
 import tcc.sgmeabackend.model.Gestor;
 import tcc.sgmeabackend.model.Tecnico;
 import tcc.sgmeabackend.model.dtos.ChamadoConsolidado;
+import tcc.sgmeabackend.model.dtos.ReportFilter;
 import tcc.sgmeabackend.model.enums.Prioridade;
 import tcc.sgmeabackend.model.enums.Status;
 import tcc.sgmeabackend.repository.ChamadoAtribuidoRepository;
@@ -160,8 +161,22 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
         return this.chamadoCriadoRepository.findAllByStatusNotAndAlocadoIsFalse(status);
     }
 
+
+    public List<ChamadoCriado> getChamadosConcluidosReport(ReportFilter filter) {
+        Status statusConcluido = Status.CONCLUIDO;
+        return chamadoCriadoRepository.findByStatusAndOptionalFilters(
+                statusConcluido,
+                filter.dataAbertura() != null ? filter.dataAbertura() : null,
+                filter.dataFechamento() != null ? filter.dataFechamento() : null,
+                filter.nomeEquipamento() != null && !filter.nomeEquipamento().isEmpty() ? filter.nomeEquipamento() : null);
+    }
+
+
+
     public List<ChamadoCriado> getChamadosConcluidos() {
         Status statusConcluido = Status.CONCLUIDO;
-        return chamadoCriadoRepository.findByStatusInAndFetchEquipamento(statusConcluido);
+        return chamadoCriadoRepository.findByStatus(statusConcluido);
     }
+
+
 }

@@ -8,10 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 import tcc.sgmeabackend.model.ChamadoCriado;
 import tcc.sgmeabackend.model.ChamadoReportResponse;
+import tcc.sgmeabackend.model.dtos.ReportFilter;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,13 +31,20 @@ public class ChamadoReportServiceImpl {
     }
 
 
-    public void exportReport(HttpServletResponse response) throws JRException, IOException {
+    public void exportReport(HttpServletResponse response, ReportFilter filter) throws JRException, IOException {
         // Define o caminho para salvar o relatório na pasta "Downloads" do usuário no Windows
 
         String PATH = "C:\\chamados-report\\relatorio.pdf";
 
+
         // Busca os chamados encerrados
-        List<ChamadoCriado> chamados = repository.getChamadosConcluidos();
+        List<ChamadoCriado> chamados = repository.getChamadosConcluidosReport(filter);
+
+        if (chamados.isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+            return;
+        }
+
         // Mapeando cada ChamadoCriado para ChamadoReportResponse
         List<ChamadoReportResponse> chamadosResponse = chamados.stream()
                 .map(chamado -> modelMapper.map(chamado, ChamadoReportResponse.class))
