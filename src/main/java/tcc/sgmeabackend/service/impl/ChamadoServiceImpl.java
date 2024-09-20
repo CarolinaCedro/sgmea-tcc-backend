@@ -57,16 +57,19 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
 
 
     public ChamadoAtribuido atribuirChamado(ChamadoAtribuido chamadoAtribuidoResponse) {
+
         ChamadoCriado chamadoCriado = chamadoCriadoRepository.findById(chamadoAtribuidoResponse.getChamadoCriado().getId()).orElseThrow();
         Tecnico tecnico = tecnicoRepository.findById(chamadoAtribuidoResponse.getTecnico().getId()).orElseThrow();
         Gestor gestor = gestorRepository.findById(chamadoAtribuidoResponse.getGestor().getId()).orElseThrow();
 
-        chamadoCriado.setPrioridade(chamadoAtribuidoResponse.getChamadoCriado().getPrioridade());
         chamadoCriado.setStatus(Status.ANDAMENTO);
+        chamadoCriado.setAlocado(true);
+        chamadoCriado.setPrioridade(chamadoAtribuidoResponse.getPrioridade());
         ChamadoAtribuido chamadoAtribuido = new ChamadoAtribuido();
         chamadoAtribuido.setChamadoCriado(chamadoCriado);
         chamadoAtribuido.setTecnico(tecnico);
         chamadoAtribuido.setGestor(gestor);
+        chamadoAtribuido.setPrioridade(chamadoAtribuidoResponse.getPrioridade());
 
         return chamadoAtribuidoRepository.save(chamadoAtribuido);
     }
@@ -89,8 +92,8 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
                 chamadoCriado.setStatus(Status.CONCLUIDO);
 
 
-                if (chamadoCriado.getPrioridade() == null) {
-                    chamadoCriado.setPrioridade(Prioridade.MEDIA);
+                if (chamadoAtribuido.getPrioridade() == null) {
+                    chamadoAtribuido.setPrioridade(Prioridade.MEDIA);
                 }
 
 
@@ -116,7 +119,6 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
                 consolidado.setId(chamadoCriado.getId());
                 consolidado.setDataAbertura(chamadoCriado.getDataAbertura());
                 consolidado.setDataFechamento(chamadoCriado.getDataFechamento());
-                consolidado.setPrioridade(chamadoCriado.getPrioridade());
                 consolidado.setStatus(chamadoCriado.getStatus().toString());
                 consolidado.setEquipamento(chamadoCriado.getEquipamento());
                 consolidado.setTitulo(chamadoCriado.getTitulo());
@@ -140,7 +142,6 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
         if (chamadoCriado.isPresent()) {
             ChamadoCriado chamado = chamadoCriado.get();
             chamado.setId(id);
-            chamado.setPrioridade(resource.getPrioridade());
             chamado.setStatus(resource.getStatus());
             chamado.setEquipamento(resource.getEquipamento());
             chamado.setTitulo(resource.getTitulo());
@@ -161,6 +162,14 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
         return this.chamadoCriadoRepository.findAllByStatusNotAndAlocadoIsFalse(status);
     }
 
+    public List<ChamadoCriado> findAllByStatusNotAndAlocadoFalse(List<Status> status) {
+        return this.chamadoCriadoRepository.findAllByStatusNotInAndAlocadoFalse(status);
+    }
+
+    public List<ChamadoAtribuido> findAllChamadosAlocados() {
+        return this.chamadoAtribuidoRepository.findAllChamadosAlocadosSemConcluidos();
+    }
+
 
     public List<ChamadoCriado> getChamadosConcluidosReport(ReportFilter filter) {
         Status statusConcluido = Status.CONCLUIDO;
@@ -170,7 +179,6 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
                 filter.dataFechamento() != null ? filter.dataFechamento() : null,
                 filter.nomeEquipamento() != null && !filter.nomeEquipamento().isEmpty() ? filter.nomeEquipamento() : null);
     }
-
 
 
     public List<ChamadoCriado> getChamadosConcluidos() {

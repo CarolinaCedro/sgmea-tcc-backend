@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UuidGenerator;
+import tcc.sgmeabackend.model.enums.Prioridade;
 import tcc.sgmeabackend.model.jackson.desserializer.ChamadoCriadoDesserializer;
 import tcc.sgmeabackend.model.jackson.desserializer.FuncionarioDesserializer;
 import tcc.sgmeabackend.model.jackson.desserializer.GestorDesserializer;
@@ -51,4 +52,6 @@ public class ChamadoAtribuido implements Serializable {
     @JsonSerialize(using = GestorSerializer.class)
     @JsonDeserialize(using = GestorDesserializer.class)
     private Gestor gestor;
+
+    private Prioridade prioridade;
 }

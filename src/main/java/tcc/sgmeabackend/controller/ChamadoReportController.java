@@ -25,13 +25,27 @@ public class ChamadoReportController {
         this.chamadoService = chamadoService;
     }
 
+//    @GetMapping("/generated-report")
+//    public void generateReport(
+//            @RequestParam(required = false) LocalDate dataAbertura,
+//            @RequestParam(required = false) LocalDate dataFechamento,
+//            @RequestParam(required = false) String nomeEquipamento,
+//            HttpServletResponse response) throws IOException, JRException {
+//        ReportFilter filter = new ReportFilter(dataAbertura, dataFechamento, nomeEquipamento);
+//        this.chamadoReportService.exportReport(response, filter);
+//    }
+
+
     @GetMapping("/generated-report")
     public void generateReport(
             @RequestParam(required = false) LocalDate dataAbertura,
             @RequestParam(required = false) LocalDate dataFechamento,
             @RequestParam(required = false) String nomeEquipamento,
             HttpServletResponse response) throws IOException, JRException {
+
         ReportFilter filter = new ReportFilter(dataAbertura, dataFechamento, nomeEquipamento);
+
+        // Chama o serviço para gerar o relatório
         this.chamadoReportService.exportReport(response, filter);
     }
 

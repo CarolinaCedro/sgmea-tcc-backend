@@ -38,10 +38,12 @@ public class ChamadoCriado implements Serializable {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataFechamento;
 
-    private Prioridade prioridade;
+
     private Status status;
 
     private boolean alocado;
+
+    private Prioridade prioridade;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)

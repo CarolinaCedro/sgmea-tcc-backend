@@ -4,10 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestBody;
+import tcc.sgmeabackend.model.ChamadoAtribuido;
 import tcc.sgmeabackend.model.ChamadoCriado;
-import tcc.sgmeabackend.model.dtos.ChamadoCriadoResponse;
-import tcc.sgmeabackend.model.dtos.ReportFilter;
 import tcc.sgmeabackend.model.enums.Status;
 
 import java.time.LocalDate;
@@ -18,7 +16,6 @@ public interface ChamadoCriadoRepository extends JpaRepository<ChamadoCriado, St
 
 
     List<ChamadoCriado> findByStatusIn(List<Status> status);
-
 
 
     @Query("SELECT c FROM ChamadoCriado c JOIN FETCH c.equipamento e " +
@@ -34,10 +31,13 @@ public interface ChamadoCriadoRepository extends JpaRepository<ChamadoCriado, St
             @Param("nomeEquipamento") String nomeEquipamento);
 
 
-
-
     List<ChamadoCriado> findAllByStatusNotAndAlocadoIsFalse(Status status);
 
     List<ChamadoCriado> findByStatus(Status statusConcluido);
+
+
+    List<ChamadoCriado> findAllByStatusNotInAndAlocadoFalse(List<Status> status);
+
+
 
 }

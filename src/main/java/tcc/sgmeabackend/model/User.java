@@ -112,13 +112,12 @@ public class User implements UserDetails {
         return List.of(new SimpleGrantedAuthority("ROLE_FUNCIONARIO"));
     }
 
-    @JsonIgnore
+
     public String getSenha() {
         return senha;
     }
 
     @Override
-    @JsonIgnore
     public String getPassword() {
         return senha;
     }

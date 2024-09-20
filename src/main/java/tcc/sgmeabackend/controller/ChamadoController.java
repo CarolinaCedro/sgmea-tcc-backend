@@ -17,6 +17,8 @@ import tcc.sgmeabackend.service.impl.ChamadoServiceImpl;
 import tcc.sgmeabackend.service.impl.FuncionarioServiceImpl;
 import tcc.sgmeabackend.service.impl.GestorServiceImpl;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -55,22 +57,25 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
 
 
     @GetMapping("/chamados-atribuidos/{id}")
-    public ResponseEntity<Optional<ChamadoCriado>> chamadoAtribuidoById(@PathVariable String id) {
-        return ResponseEntity.ok(this.service.findById(id));
+    public ResponseEntity<Optional<ChamadoAtribuido>> chamadoAtribuidoById(@PathVariable String id) {
+        return ResponseEntity.ok(this.chamadoAtribuidoRepository.findById(id));
     }
 
     @GetMapping("/chamados-atribuidos")
     public ResponseEntity<PageableResource<ChamadoAtribuido>> chamadoAtribuidos() {
-        Status statusToExclude = Status.CONCLUIDO;
-        return ResponseEntity.ok(toPageableResource(statusToExclude));
+        final List<ChamadoAtribuido> records = this.service.findAllChamadosAlocados();
+        return ResponseEntity.ok(new PageableResource<>(records));
+
     }
 
 
     @Override
     @GetMapping
     public ResponseEntity<PageableResource<ChamadoCriado>> list(HttpServletResponse response, Map<String, String> allRequestParams) {
-        Status statusToExclude = Status.ENCERRADO;
-        return ResponseEntity.ok(toPageableResource(statusToExclude));
+        List<Status> status = Arrays.asList(Status.ENCERRADO, Status.CONCLUIDO);
+
+        final List<ChamadoCriado> records = this.service.findAllByStatusNotAndAlocadoFalse(status);
+        return ResponseEntity.ok(new PageableResource<>(records));
     }
 
     @GetMapping("/chamados-encerrados")

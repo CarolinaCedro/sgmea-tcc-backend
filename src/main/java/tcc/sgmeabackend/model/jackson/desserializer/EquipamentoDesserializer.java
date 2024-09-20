@@ -7,8 +7,8 @@ public class EquipamentoDesserializer extends AbstractDesserializer<Equipamento>
 
     @Override
     protected Equipamento newInstance(final String id) {
-        Equipamento chamado = new Equipamento();
-        chamado.setId(id);
-        return chamado;
+        Equipamento equipamento = new Equipamento();
+        equipamento.setId(id);
+        return equipamento;
     }
 }

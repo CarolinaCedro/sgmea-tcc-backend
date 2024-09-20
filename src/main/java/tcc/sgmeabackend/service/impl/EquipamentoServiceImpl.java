@@ -22,6 +22,10 @@ public class EquipamentoServiceImpl extends AbstractService<Equipamento> {
 
     @Override
     public Equipamento update(String id, Equipamento resource) {
+        System.out.println("ID EQUIPAMENTO" + id);
+        System.out.println("EQUIPAMENTO" + resource);
+
+
         Optional<Equipamento> equipamento = this.findById(id);
         if (equipamento.isPresent()) {
             Equipamento equip = equipamento.get();
