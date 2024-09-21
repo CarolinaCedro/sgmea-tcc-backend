@@ -77,7 +77,6 @@ public class User implements UserDetails {
 
 
     @Override
-    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.role == UserRole.ADMIN) {
             return List.of(
@@ -113,9 +112,7 @@ public class User implements UserDetails {
     }
 
 
-    public String getSenha() {
-        return senha;
-    }
+
 
     @Override
     public String getPassword() {

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import tcc.sgmeabackend.model.UpdateUser;
 import tcc.sgmeabackend.model.User;
 import tcc.sgmeabackend.model.dtos.ResetPasswordRequest;
 import tcc.sgmeabackend.model.dtos.UserForgotPasswordRequestDto;
@@ -16,6 +17,7 @@ import tcc.sgmeabackend.service.AbstractService;
 import tcc.sgmeabackend.service.impl.UserServiceImpl;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/sgmea/v1/users")
@@ -42,22 +44,21 @@ public class UserController extends AbstractController<User, User> {
 
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<String> forgotPassword(@RequestBody UserForgotPasswordRequestDto forgotPasswordRequest) {
+    public void forgotPassword(@RequestBody UserForgotPasswordRequestDto forgotPasswordRequest) {
         this.service.processForgotPassword(forgotPasswordRequest.getEmail());
-        return ResponseEntity.ok("Password recovery instructions sent to your email.");
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest request) {
+    public void resetPassword(@RequestBody ResetPasswordRequest request) {
         User user = userRepository.findByResetToken(request.getToken());
 
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token inválido ou expirado.");
+            throw new RuntimeException("Token inválido ou expirado.");
         }
 
         // Verifica se o token não está expirado
         if (user.getResetTokenExpiryDate().isBefore(LocalDateTime.now())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token expirado.");
+            throw new RuntimeException("Token expirado.");
         }
 
         // Atualiza a senha do usuário
@@ -66,7 +67,16 @@ public class UserController extends AbstractController<User, User> {
         user.setResetTokenExpiryDate(null);
         userRepository.save(user);
 
-        return ResponseEntity.ok("Senha redefinida com sucesso.");
+    }
+
+    @PostMapping("/updateUser")
+    public ResponseEntity<?> updateUser(@RequestBody UpdateUser payloadUser) {
+        Optional<User> user = userRepository.findById(payloadUser.getId());
+
+        if (user.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User não encontrado.");
+        }
+        return ResponseEntity.ok(this.service.updateUser(user, payloadUser));
     }
 
 
