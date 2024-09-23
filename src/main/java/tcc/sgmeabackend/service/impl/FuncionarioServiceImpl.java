@@ -3,9 +3,11 @@ package tcc.sgmeabackend.service.impl;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import tcc.sgmeabackend.model.Funcionario;
+import tcc.sgmeabackend.model.PageableResource;
 import tcc.sgmeabackend.repository.FuncionarioRepository;
 import tcc.sgmeabackend.service.AbstractService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -40,5 +42,9 @@ public class FuncionarioServiceImpl extends AbstractService<Funcionario> {
     @Override
     protected JpaRepository<Funcionario, String> getRepository() {
         return funcionarioRepository;
+    }
+
+    public List<Funcionario> findByNome(String nome) {
+        return this.funcionarioRepository.findByNomeContainingIgnoreCase(nome);
     }
 }

@@ -35,7 +35,7 @@ public class EquipamentoServiceImpl extends AbstractService<Equipamento> {
             equip.setModelo(resource.getModelo());
             equip.setFabricante(resource.getFabricante());
             equip.setEmUso(resource.isEmUso());
-            this.equipamentoRepository.save(equip);
+            return this.equipamentoRepository.save(equip);
         }
         return null;
     }
