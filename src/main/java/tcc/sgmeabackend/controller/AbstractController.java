@@ -9,9 +9,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tcc.sgmeabackend.model.Funcionario;
 import tcc.sgmeabackend.model.PageableResource;
 import tcc.sgmeabackend.service.AbstractService;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -49,6 +51,7 @@ public abstract class AbstractController<T, E> implements RestController<T, E> {
 
         return ResponseEntity.ok(value);
     }
+
 
 
     @Override

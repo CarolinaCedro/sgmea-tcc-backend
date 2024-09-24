@@ -9,6 +9,7 @@ import tcc.sgmeabackend.repository.EquipamentoRepository;
 import tcc.sgmeabackend.repository.FuncionarioRepository;
 import tcc.sgmeabackend.service.AbstractService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -43,5 +44,10 @@ public class EquipamentoServiceImpl extends AbstractService<Equipamento> {
     @Override
     protected JpaRepository<Equipamento, String> getRepository() {
         return equipamentoRepository;
+    }
+
+    public List<Equipamento> findByNome(String nome) {
+        return this.equipamentoRepository.findByNomeContainingIgnoreCase(nome);
+
     }
 }

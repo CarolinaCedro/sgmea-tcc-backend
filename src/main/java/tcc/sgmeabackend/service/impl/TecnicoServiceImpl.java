@@ -6,6 +6,7 @@ import tcc.sgmeabackend.model.Tecnico;
 import tcc.sgmeabackend.repository.TecnicoRepository;
 import tcc.sgmeabackend.service.AbstractService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -41,5 +42,10 @@ public class TecnicoServiceImpl extends AbstractService<Tecnico> {
     @Override
     protected JpaRepository<Tecnico, String> getRepository() {
         return tecnicoRepository;
+    }
+
+    public List<Tecnico> findByNome(String nome) {
+        return this.tecnicoRepository.findByNomeContainingIgnoreCase(nome);
+
     }
 }

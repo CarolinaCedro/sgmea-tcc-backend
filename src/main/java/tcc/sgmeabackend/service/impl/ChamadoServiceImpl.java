@@ -186,5 +186,21 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
         return chamadoCriadoRepository.findByStatus(statusConcluido);
     }
 
+    public List<ChamadoCriado> findByTituloContainingAndStatusIn(String titulo, List<Status> statusEncerrados) {
+        return chamadoCriadoRepository.findByTituloContainingAndStatusIn(titulo, statusEncerrados);
+    }
+
+
+
+    public List<ChamadoCriado> findByTitulo(String titulo) {
+        return this.chamadoCriadoRepository.findByTituloContainingIgnoreCase(titulo);
+
+    }
+
+    public List<ChamadoCriado> findAllByTituloContainingAndStatusNotInAndAlocadoFalse(String titulo, List<Status> status) {
+        return this.chamadoCriadoRepository.findAllByTituloContainingAndStatusNotInAndAlocadoFalse(titulo, status);
+    }
+
+
 
 }

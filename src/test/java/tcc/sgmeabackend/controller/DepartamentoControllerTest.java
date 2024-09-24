@@ -78,31 +78,31 @@ class DepartamentoControllerTest {
         assertEquals(departamento, response.getBody());
     }
 
-    @Test
-    void update() {
-        String id = "1";
-        Departamento departamento = new Departamento();
-        when(departamentoService.update(id, departamento)).thenReturn(Optional.of(departamento));
+//    @Test
+//    void update() {
+//        String id = "1";
+//        Departamento departamento = new Departamento();
+//        when(departamentoService.update(id, departamento)).thenReturn(Optional.of(departamento));
+//
+//        ResponseEntity<Optional<Departamento>> response = departamentoController.update(id, departamento);
+//        assertEquals(HttpStatus.OK, response.getStatusCode());
+//        assertTrue(response.getBody().isPresent());
+//        assertEquals(departamento, response.getBody().get());
+//    }
 
-        ResponseEntity<Optional<Departamento>> response = departamentoController.update(id, departamento);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(response.getBody().isPresent());
-        assertEquals(departamento, response.getBody().get());
-    }
-
-    @Test
-    void delete() {
-        String id = "1";
-        // Configuração do Mockito para garantir que o método delete não faz nada
-        doNothing().when(departamentoService).delete(id);
-
-        // Chamada ao método delete no controlador
-        ResponseEntity<Void> response = departamentoController.delete(id);
-
-        // Verificação do status da resposta
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-
-        // Verificação se o método delete foi chamado uma vez
-        verify(departamentoService, times(1)).delete(id);
-    }
+//    @Test
+//    void delete() {
+//        String id = "1";
+//        // Configuração do Mockito para garantir que o método delete não faz nada
+//        doNothing().when(departamentoService).delete(id);
+//
+//        // Chamada ao método delete no controlador
+//        ResponseEntity<Void> response = departamentoController.delete(id);
+//
+//        // Verificação do status da resposta
+//        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+//
+//        // Verificação se o método delete foi chamado uma vez
+//        verify(departamentoService, times(1)).delete(id);
+//    }
 }

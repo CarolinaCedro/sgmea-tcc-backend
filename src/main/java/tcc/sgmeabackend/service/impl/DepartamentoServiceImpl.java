@@ -6,6 +6,7 @@ import tcc.sgmeabackend.model.Departamento;
 import tcc.sgmeabackend.repository.DepartamentoRepository;
 import tcc.sgmeabackend.service.AbstractService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,5 +35,10 @@ public class DepartamentoServiceImpl extends AbstractService<Departamento> {
     @Override
     protected JpaRepository<Departamento, String> getRepository() {
         return departamentoRepository;
+    }
+
+    public List<Departamento> findByNome(String nome) {
+        return this.departamentoRepository.findByNomeContainingIgnoreCase(nome);
+
     }
 }

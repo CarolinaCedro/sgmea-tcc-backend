@@ -6,6 +6,7 @@ import tcc.sgmeabackend.model.Gestor;
 import tcc.sgmeabackend.repository.GestorRepository;
 import tcc.sgmeabackend.service.AbstractService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -41,5 +42,9 @@ public class GestorServiceImpl extends AbstractService<Gestor> {
     @Override
     protected JpaRepository<Gestor, String> getRepository() {
         return gestorRepository;
+    }
+
+    public List<Gestor> findByNome(String nome) {
+        return this.gestorRepository.findByNomeContainingIgnoreCase(nome);
     }
 }

@@ -17,7 +17,6 @@ import tcc.sgmeabackend.service.impl.ChamadoServiceImpl;
 import tcc.sgmeabackend.service.impl.FuncionarioServiceImpl;
 import tcc.sgmeabackend.service.impl.GestorServiceImpl;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -69,6 +68,29 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
     }
 
 
+    @GetMapping("/list-advanced")
+    public ResponseEntity<PageableResource<ChamadoCriado>> listAdvanced(
+            @RequestParam(name = "titulo", required = false) String titulo) {
+
+        List<Status> status = Arrays.asList(Status.ENCERRADO, Status.CONCLUIDO);
+        List<String> listStringStatus = Arrays.asList(Status.ENCERRADO.toString(), Status.CONCLUIDO.toString());
+
+
+        List<ChamadoCriado> list;
+
+        // Verifica se o titulo está vazio ou nulo
+        if (titulo != null && !titulo.trim().isEmpty()) {
+            // Se o titulo não for nulo ou vazio, realiza a busca pelo titulo
+            list = this.service.findAllByTituloContainingAndStatusNotInAndAlocadoFalse(titulo, status);
+        } else {
+            // Se o nome for nulo ou vazio, retorna todos os funcionários
+            list = this.service.findAllByStatusNotAndAlocadoFalse(status);
+        }
+
+        return ResponseEntity.ok(new PageableResource<>(list));
+    }
+
+
     @Override
     @GetMapping
     public ResponseEntity<PageableResource<ChamadoCriado>> list(HttpServletResponse response, Map<String, String> allRequestParams) {
@@ -83,6 +105,28 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
         List<ChamadoCriado> chamados = this.service.getChamadosEncerrados();
         return ResponseEntity.ok(new PageableResource(chamados));
     }
+
+    @GetMapping("/chamados-encerrados/list-advanced")
+    public ResponseEntity<PageableResource<ChamadoCriado>> listAdvancedByConcluido(
+            @RequestParam(name = "titulo", required = false) String titulo) {
+
+        List<ChamadoCriado> list;
+
+        // Cria uma lista com os status ENCERRADO e CONCLUIDO
+        List<Status> statusEncerrados = Arrays.asList(Status.ENCERRADO, Status.CONCLUIDO);
+
+        // Verifica se o titulo está vazio ou nulo
+        if (titulo != null && !titulo.trim().isEmpty()) {
+            // Se o titulo não for nulo ou vazio, realiza a busca por título e status "Encerrado/Concluído"
+            list = this.service.findByTituloContainingAndStatusIn(titulo, statusEncerrados);
+        } else {
+            // Se o título for nulo ou vazio, retorna todos os chamados com status "Encerrado/Concluído"
+            list = this.service.getChamadosEncerrados();
+        }
+
+        return ResponseEntity.ok(new PageableResource<>(list));
+    }
+
 
     @GetMapping("/chamados-concluidos")
     public ResponseEntity<PageableResource<ChamadoReportResponse>> chamadosConcluidos() {

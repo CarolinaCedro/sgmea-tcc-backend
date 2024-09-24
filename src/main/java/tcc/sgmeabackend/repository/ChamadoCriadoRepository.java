@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import tcc.sgmeabackend.model.ChamadoAtribuido;
 import tcc.sgmeabackend.model.ChamadoCriado;
+import tcc.sgmeabackend.model.Tecnico;
 import tcc.sgmeabackend.model.enums.Status;
 
 import java.time.LocalDate;
@@ -37,6 +38,14 @@ public interface ChamadoCriadoRepository extends JpaRepository<ChamadoCriado, St
 
 
     List<ChamadoCriado> findAllByStatusNotInAndAlocadoFalse(List<Status> status);
+
+
+
+    List<ChamadoCriado> findByTituloContainingIgnoreCase(String titulo);
+
+     List<ChamadoCriado> findAllByTituloContainingAndStatusNotInAndAlocadoFalse(String titulo, List<Status> status);
+
+     List<ChamadoCriado> findByTituloContainingAndStatusIn(String titulo, List<Status> statusEncerrados);
 
 
 
