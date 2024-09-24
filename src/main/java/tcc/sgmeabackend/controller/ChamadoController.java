@@ -192,7 +192,7 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
         }
 
         Gestor gestor = gestorOpt.get();
-        emailService.chamadoCriado(funcionario.getEmail(), gestor.getEmail());
+        emailService.chamadoCriado(funcionario.getEmail(), gestor.getEmail(), resource.getObservacoes(),gestorOpt.get().getNome(),funcionarioOpt.get().getNome());
 
 
         return super.create(resource);

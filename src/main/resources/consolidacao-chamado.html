@@ -21,20 +21,36 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         .header {
-            background-color: #4CAF50;
-            color: white;
+            background-color: #2563EB;
             padding: 20px;
             text-align: center;
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
+        }
+        .header h2 {
+            margin: 0;
+            font-size: 24px;
+            color: white;
         }
         .content {
             padding: 20px;
             text-align: left;
             line-height: 1.6;
         }
+        .content p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .content ul {
+            padding-left: 20px;
+            list-style-type: disc;
+        }
+        .content ul li {
+            font-size: 16px;
+            margin: 5px 0;
+        }
         .footer {
-            background-color: #4CAF50;
+            background-color: #2563EB;
             color: white;
             text-align: center;
             padding: 10px;
@@ -43,6 +59,7 @@
         }
         .footer p {
             margin: 0;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -53,13 +70,13 @@
     </div>
     <div class="content">
         <p>Prezados,</p>
-        <p>O chamado foi consolidado pelo técnico responsável e está pronto para revisão e aprovação.</p>
-        <p>Detalhes do Chamado Consolidado:</p>
+        <p>O chamado foi consolidado pelo técnico responsável e está pronto .</p>
+        <p><strong>Detalhes do Chamado Consolidado:</strong></p>
         <ul>
-            <li>ID do Chamado: [ID do Chamado]</li>
-            <li>Descrição do Chamado: "[Descrição do Chamado]"</li>
-            <li>Prioridade: [Prioridade do Chamado]</li>
-            <li>Status: Consolidado</li>
+            <li><strong>ID do protocolo: </strong> #{ID}</li>
+            <li><strong>Descrição do Chamado: </strong> "#{descricao_chamado}"</li>
+            <li><strong>Prioridade: </strong> #{prioridade_chamado}</li>
+            <li><strong>Status: </strong> #{status_chamado}</li>
         </ul>
         <p>Por favor, revise e confirme as informações conforme necessário através do sistema SGMEA.</p>
         <p>Atenciosamente,</p>

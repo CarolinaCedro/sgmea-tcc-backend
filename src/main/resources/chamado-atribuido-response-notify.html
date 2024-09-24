@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notificação de Chamado em Andamento</title>
+    <title>Notificação de Chamado em andamento</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             background-color: #f4f4f4;
             color: #333;
             margin: 0;
@@ -21,20 +21,36 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         .header {
-            background-color: #4CAF50;
+            background-color: #007BFF;
             color: white;
             padding: 20px;
             text-align: center;
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
         }
+        .header h2 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
         .content {
             padding: 20px;
             text-align: left;
             line-height: 1.6;
         }
+        .content p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .highlight {
+            background-color: #e7f1ff;
+            border-left: 4px solid #007BFF;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
         .footer {
-            background-color: #4CAF50;
+            background-color: #007BFF;
             color: white;
             text-align: center;
             padding: 10px;
@@ -43,6 +59,7 @@
         }
         .footer p {
             margin: 0;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -54,8 +71,10 @@
     <div class="content">
         <p>Olá [Nome do Funcionário],</p>
         <p>Seu chamado foi atribuído com sucesso e está sendo tratado pelo técnico responsável. A seguir estão os detalhes:</p>
-        <p>Prioridade: [Prioridade do Chamado]</p>
-        <p>Técnico Responsável: [Nome do Técnico]</p>
+        <div class="highlight">
+            <p><strong>Prioridade: </strong> [Prioridade do Chamado]</p>
+            <p><strong>Técnico Responsável: </strong> [Nome do Técnico]</p>
+        </div>
         <p>Agradecemos pela sua paciência enquanto trabalhamos para resolver seu problema.</p>
         <p>Atenciosamente,</p>
         <p>Equipe de Suporte - SGMEA</p>

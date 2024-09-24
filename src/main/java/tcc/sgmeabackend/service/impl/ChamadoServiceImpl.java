@@ -16,6 +16,7 @@ import tcc.sgmeabackend.repository.ChamadoCriadoRepository;
 import tcc.sgmeabackend.repository.GestorRepository;
 import tcc.sgmeabackend.repository.TecnicoRepository;
 import tcc.sgmeabackend.service.AbstractService;
+import tcc.sgmeabackend.service.EmailService;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -27,15 +28,19 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
 
     private final ChamadoCriadoRepository chamadoCriadoRepository;
     private final TecnicoRepository tecnicoRepository;
+
+    private final EmailService emailService;
+
     private final GestorRepository gestorRepository;
     private final ChamadoAtribuidoRepository chamadoAtribuidoRepository;
 
     private final ModelMapper modelMapper;
 
 
-    public ChamadoServiceImpl(ChamadoCriadoRepository chamadoCriadoRepository, TecnicoRepository tecnicoRepository, GestorRepository gestorRepository, ChamadoAtribuidoRepository chamadoAtribuidoRepository, ModelMapper modelMapper) {
+    public ChamadoServiceImpl(ChamadoCriadoRepository chamadoCriadoRepository, TecnicoRepository tecnicoRepository, EmailService emailService, GestorRepository gestorRepository, ChamadoAtribuidoRepository chamadoAtribuidoRepository, ModelMapper modelMapper) {
         this.chamadoCriadoRepository = chamadoCriadoRepository;
         this.tecnicoRepository = tecnicoRepository;
+        this.emailService = emailService;
         this.gestorRepository = gestorRepository;
         this.chamadoAtribuidoRepository = chamadoAtribuidoRepository;
         this.modelMapper = modelMapper;
@@ -70,6 +75,8 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
         chamadoAtribuido.setTecnico(tecnico);
         chamadoAtribuido.setGestor(gestor);
         chamadoAtribuido.setPrioridade(chamadoAtribuidoResponse.getPrioridade());
+
+        emailService.chamadoAtribuido(chamadoCriado.getFuncionario().getEmail(), chamadoAtribuido.getGestor().getEmail(), chamadoAtribuido);
 
         return chamadoAtribuidoRepository.save(chamadoAtribuido);
     }
@@ -126,7 +133,11 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
                 consolidado.setObservacoes(chamadoCriado.getObservacoes());
                 consolidado.setFuncionario(chamadoCriado.getFuncionario());
                 consolidado.setGestor(chamadoAtribuido.getGestor());
+                consolidado.setPrioridade(chamadoAtribuido.getPrioridade());
                 consolidado.setTecnico(chamadoAtribuido.getTecnico());
+
+                emailService.consolidacaoChamado(chamadoCriado.getFuncionario().getEmail(), chamadoAtribuido.getGestor().getEmail(), consolidado);
+
 
                 return consolidado;
             }
@@ -191,7 +202,6 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
     }
 
 
-
     public List<ChamadoCriado> findByTitulo(String titulo) {
         return this.chamadoCriadoRepository.findByTituloContainingIgnoreCase(titulo);
 
@@ -200,7 +210,6 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
     public List<ChamadoCriado> findAllByTituloContainingAndStatusNotInAndAlocadoFalse(String titulo, List<Status> status) {
         return this.chamadoCriadoRepository.findAllByTituloContainingAndStatusNotInAndAlocadoFalse(titulo, status);
     }
-
 
 
 }

@@ -1,5 +1,8 @@
 package tcc.sgmeabackend.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -59,6 +62,7 @@ public class User implements UserDetails {
     private Perfil perfil;
 
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String senha;
 
 
@@ -77,6 +81,7 @@ public class User implements UserDetails {
 
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.role == UserRole.ADMIN) {
             return List.of(
@@ -111,10 +116,16 @@ public class User implements UserDetails {
         return List.of(new SimpleGrantedAuthority("ROLE_FUNCIONARIO"));
     }
 
-
+    @JsonProperty("authorities")
+    public List<String> getRoles() {
+        return getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+    }
 
 
     @Override
+    @JsonIgnore
     public String getPassword() {
         return senha;
     }

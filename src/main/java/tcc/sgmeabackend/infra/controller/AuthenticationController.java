@@ -13,10 +13,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import tcc.sgmeabackend.infra.security.TokenService;
+import tcc.sgmeabackend.model.Funcionario;
+import tcc.sgmeabackend.model.Perfil;
 import tcc.sgmeabackend.model.User;
 import tcc.sgmeabackend.model.dtos.AuthenticationDto;
 import tcc.sgmeabackend.model.dtos.LoginResponseDTO;
 import tcc.sgmeabackend.model.dtos.RegisterDto;
+import tcc.sgmeabackend.repository.FuncionarioRepository;
+import tcc.sgmeabackend.repository.GestorRepository;
+import tcc.sgmeabackend.repository.TecnicoRepository;
 import tcc.sgmeabackend.repository.UserRepository;
 
 @RestController
@@ -27,6 +32,17 @@ public class AuthenticationController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    private FuncionarioRepository funcionarioRepository;
+
+    @Autowired
+    private GestorRepository gestorRepository;
+
+    @Autowired
+    private TecnicoRepository tecnicoRepository;
+
+
     @Autowired
     private TokenService tokenService;
 
@@ -51,6 +67,25 @@ public class AuthenticationController {
         User newUser = new User(null, data.nome(), data.cpf(), data.email(), encryptedPassword, data.role(), data.perfil());
 
         try {
+            if (data.perfil().equals(Perfil.FUNCIONARIO)) {
+                Funcionario funcionario = new Funcionario();
+
+                funcionario.setId(newUser.getId());
+                funcionario.setNome(newUser.getNome());
+                funcionario.setEmail(newUser.getEmail());
+                funcionario.setSenha(newUser.getSenha());
+                funcionario.setGestor(newUser.getGestor());
+                funcionario.setDepartamento(null);
+                funcionario.setChamadoCriados(null);
+                funcionario.setFuncao("Não foi informado");
+                funcionario.setRole(newUser.getRole());
+                funcionario.setPerfil(newUser.getPerfil());
+
+                this.funcionarioRepository.save(funcionario);
+
+                return ResponseEntity.ok().build();
+            }
+
             this.repository.save(newUser);
 //            this.emailService.enviarEmailTexto(data.email(), "Novo Cadastro", "Foi criado um novo usuario no sistema");
             return ResponseEntity.ok().build(); // Envio de e-mail bem-sucedido
@@ -73,7 +108,6 @@ public class AuthenticationController {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
-
 
 
 }
