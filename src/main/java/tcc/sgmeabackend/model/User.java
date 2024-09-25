@@ -62,7 +62,6 @@ public class User implements UserDetails {
     private Perfil perfil;
 
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String senha;
 
 
@@ -79,6 +78,10 @@ public class User implements UserDetails {
         this.perfil = perfil;
     }
 
+    public User(String id, String nome) {
+        this.id = id;
+        this.nome = nome;
+    }
 
     @Override
     @JsonIgnore

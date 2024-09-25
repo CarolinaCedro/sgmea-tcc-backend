@@ -101,6 +101,7 @@ public class EmailService {
             if (chamadoCriado.isPresent()) {
                 ChamadoCriado chamado = chamadoCriado.get();
                 String template = pathForTemplateEmail("chamado-atribuido-response-notify.html");
+                
                 template = template.replace("#{nome_funcionario}", chamado.getFuncionario().getNome());
                 template = template.replace("#{prioridade_chamado}", chamadoAtribuido.getPrioridade().toString());
                 template = template.replace("#{nome_tecnico_atribuido}", chamadoAtribuido.getTecnico().getNome());

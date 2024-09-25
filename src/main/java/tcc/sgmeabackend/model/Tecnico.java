@@ -4,17 +4,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import tcc.sgmeabackend.model.enums.UserRole;
 import tcc.sgmeabackend.model.jackson.desserializer.ChamadoAtribuidoDesserializer;
-import tcc.sgmeabackend.model.jackson.desserializer.EspecialidadeDesserializer;
 import tcc.sgmeabackend.model.jackson.serializer.ChamadoAtribuidoSerializer;
-import tcc.sgmeabackend.model.jackson.serializer.EquipamentoSerializer;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Getter
 @Entity
 public class Tecnico extends User {
@@ -44,9 +47,11 @@ public class Tecnico extends User {
         super();
     }
 
-    public void consolidarChamado(ChamadoAtribuido chamadoAtribuido, String observacaoConsolidacao) {
-//        ChamadoCriado chamadoCriado = chamadoAtribuido.getChamadoCriado();
-//        chamadoCriado.finalizarChamado(observacaoConsolidacao);
-        // Salvar alterações no banco de dados
+    public Tecnico(String id, @NotNull(message = "O campo NOME é requerido") String nome, String cpf, String email, String resetToken, LocalDateTime resetTokenExpiryDate, Gestor gestor, Perfil perfil, String senha, UserRole role, List<Especialidade> especialidades, boolean disponibilidade, List<ChamadoAtribuido> chamadoAtribuidos) {
+        super(id, nome, cpf, email, resetToken, resetTokenExpiryDate, gestor, perfil, senha, role);
+        this.especialidades = especialidades;
+        this.disponibilidade = disponibilidade;
+        this.chamadoAtribuidos = chamadoAtribuidos;
     }
+
 }
