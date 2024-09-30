@@ -2,11 +2,8 @@ package tcc.sgmeabackend.service.impl;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
-import tcc.sgmeabackend.model.Departamento;
 import tcc.sgmeabackend.model.Equipamento;
-import tcc.sgmeabackend.model.Funcionario;
 import tcc.sgmeabackend.repository.EquipamentoRepository;
-import tcc.sgmeabackend.repository.FuncionarioRepository;
 import tcc.sgmeabackend.service.AbstractService;
 
 import java.util.List;
@@ -34,6 +31,7 @@ public class EquipamentoServiceImpl extends AbstractService<Equipamento> {
             equip.setNome(resource.getNome());
             equip.setDescricao(resource.getDescricao());
             equip.setModelo(resource.getModelo());
+            equip.setPatrimonio(resource.getPatrimonio());
             equip.setFabricante(resource.getFabricante());
             equip.setEmUso(resource.isEmUso());
             return this.equipamentoRepository.save(equip);
@@ -49,5 +47,9 @@ public class EquipamentoServiceImpl extends AbstractService<Equipamento> {
     public List<Equipamento> findByNome(String nome) {
         return this.equipamentoRepository.findByNomeContainingIgnoreCase(nome);
 
+    }
+
+    public long countEquipamentos() {
+        return this.equipamentoRepository.count();
     }
 }

@@ -3,10 +3,7 @@ package tcc.sgmeabackend.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -38,7 +35,7 @@ public class ChamadoCriado implements Serializable {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataFechamento;
 
-
+    @Enumerated(EnumType.ORDINAL)
     private Status status;
 
     private boolean alocado;

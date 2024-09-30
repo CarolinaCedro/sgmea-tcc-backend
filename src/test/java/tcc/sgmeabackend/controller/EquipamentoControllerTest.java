@@ -55,9 +55,9 @@ class EquipamentoControllerTest {
 
     @Test
     void findByIds() {
-        Equipamento equip1 = new Equipamento("1", "Ar condicionado", "aparelho", "JOIUN", "JULIYU9999", true);
-        Equipamento equip2 = new Equipamento("2", "Cadeira", "cadeira", "JOIUN", "JULIYU9999", true);
-        Set<Equipamento> equipamentos = Set.of(equip1, equip2); // Conjunto com dois objetos únicos
+        Equipamento equip1 = new Equipamento("1","Cadeira","descricao","54345","juils","456456",true,null);
+        Equipamento equip2 = new Equipamento("2","Ar condicionado","descricao","54345","juils","456456",true,null);
+        Set<Equipamento> equipamentos = Set.of(equip1, equip2);
 
         when(equipamentoService.findByIds(any(String[].class))).thenReturn(equipamentos);
 

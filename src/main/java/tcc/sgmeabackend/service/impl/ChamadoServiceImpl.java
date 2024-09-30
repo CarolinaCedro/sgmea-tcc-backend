@@ -1,6 +1,7 @@
 package tcc.sgmeabackend.service.impl;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import tcc.sgmeabackend.model.ChamadoAtribuido;
@@ -19,9 +20,8 @@ import tcc.sgmeabackend.service.AbstractService;
 import tcc.sgmeabackend.service.EmailService;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.time.temporal.WeekFields;
+import java.util.*;
 
 @Service
 public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
@@ -79,6 +79,26 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
         emailService.chamadoAtribuido(chamadoCriado.getFuncionario().getEmail(), chamadoAtribuido.getGestor().getEmail(), chamadoAtribuido);
 
         return chamadoAtribuidoRepository.save(chamadoAtribuido);
+    }
+
+
+    public int countChamadosByStatus(Status status) {
+
+        try {
+            // Passa o ordinal (número) do enum para a consulta
+            return chamadoCriadoRepository.countByStatus(status);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("O status fornecido não corresponde a um valor válido da enumeração Status.");
+        }
+    }
+
+
+    public int countChamadosCriticos() {
+        return chamadoAtribuidoRepository.countChamadosCriticos();
+    }
+
+    public int countPropostasNovas() {
+        return chamadoCriadoRepository.countPropostasNovas();
     }
 
     public ChamadoConsolidado consolidarChamado(String id, String observacaoConsolidacao) {
@@ -147,6 +167,35 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
     }
 
 
+    public Map<String, Object> getChamadoChartData() {
+        Map<String, Object> chartData = new HashMap<>();
+
+        // Obter as datas de início e fim da semana atual e da semana passada
+        LocalDate today = LocalDate.now();
+        WeekFields weekFields = WeekFields.of(Locale.getDefault());
+
+        LocalDate startOfThisWeek = today.with(weekFields.dayOfWeek(), 1);  // Início desta semana
+        LocalDate endOfThisWeek = today.with(weekFields.dayOfWeek(), 7);    // Fim desta semana
+
+        LocalDate startOfLastWeek = startOfThisWeek.minusWeeks(1);  // Início da semana passada
+        LocalDate endOfLastWeek = endOfThisWeek.minusWeeks(1);      // Fim da semana passada
+
+        // Consultar os chamados desta semana e da semana passada
+        int chamadosThisWeek = chamadoCriadoRepository.countChamadosByWeek(startOfThisWeek, endOfThisWeek, Status.CONCLUIDO);
+        int chamadosLastWeek = chamadoCriadoRepository.countChamadosByWeek(startOfLastWeek, endOfLastWeek, Status.CONCLUIDO);
+
+        // Consultar os 4 equipamentos com mais chamados abertos
+        List<Map<String, Object>> topEquipamentos = chamadoCriadoRepository.findTopEquipamentosByChamados(Status.CONCLUIDO, PageRequest.of(0, 4));
+
+        // Preencher os dados para o gráfico
+        chartData.put("labels", topEquipamentos.stream().map(e -> e.get("equipamento")).toArray());
+        chartData.put("thisWeek", new int[]{chamadosThisWeek});
+        chartData.put("lastWeek", new int[]{chamadosLastWeek});
+
+        return chartData;
+    }
+
+
     @Override
     public ChamadoCriado update(String id, ChamadoCriado resource) {
         Optional<ChamadoCriado> chamadoCriado = this.findById(id);
@@ -186,9 +235,9 @@ public class ChamadoServiceImpl extends AbstractService<ChamadoCriado> {
         Status statusConcluido = Status.CONCLUIDO;
         return chamadoCriadoRepository.findByStatusAndOptionalFilters(
                 statusConcluido,
-                filter.dataAbertura() != null ? filter.dataAbertura() : null,
-                filter.dataFechamento() != null ? filter.dataFechamento() : null,
-                filter.nomeEquipamento() != null && !filter.nomeEquipamento().isEmpty() ? filter.nomeEquipamento() : null);
+                filter.getDataAbertura() != null ? filter.getDataAbertura() : null,
+                filter.getDataFechamento() != null ? filter.getDataFechamento() : null,
+                filter.getNomeEquipamento() != null && !filter.getNomeEquipamento().isEmpty() ? filter.getNomeEquipamento() : null);
     }
 
 

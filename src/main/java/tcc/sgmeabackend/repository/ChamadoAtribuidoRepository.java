@@ -16,5 +16,12 @@ public interface ChamadoAtribuidoRepository extends JpaRepository<ChamadoAtribui
     @Query("SELECT c FROM ChamadoAtribuido c WHERE c.chamadoCriado.status <> 3 ")
     List<ChamadoAtribuido> findAllChamadosAlocadosSemConcluidos();
 
+
+    // Contar chamados críticos
+    @Query("SELECT COUNT(c) FROM ChamadoCriado c WHERE c.prioridade = 3")
+    int countChamadosCriticos();
+
+
+
 }
 

@@ -4,7 +4,6 @@ public enum Status {
 
     ABERTO(0, "ABERTO"), ANDAMENTO(1, "ANDAMENTO"), ENCERRADO(2, "ENCERRADO"), CONCLUIDO(3, "CONCLUIDO");
 
-    private Integer codigo;
     private String descricao;
 
     private Status(Integer codigo, String descricao) {
@@ -12,25 +11,22 @@ public enum Status {
         this.descricao = descricao;
     }
 
-    public Integer getCodigo() {
+    private final int codigo;
+
+    Status(int codigo) {
+        this.codigo = codigo;
+    }
+
+    public int getCodigo() {
         return codigo;
     }
 
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public static Status toEnum(Integer cod) {
-        if (cod == null) {
-            return null;
-        }
-
-        for (Status x : Status.values()) {
-            if (cod.equals(x.getCodigo())) {
-                return x;
+    public static Status fromCodigo(int codigo) {
+        for (Status status : Status.values()) {
+            if (status.getCodigo() == codigo) {
+                return status;
             }
         }
-
-        throw new IllegalArgumentException("Status inválido");
+        throw new IllegalArgumentException("Código de status inválido: " + codigo);
     }
 }
