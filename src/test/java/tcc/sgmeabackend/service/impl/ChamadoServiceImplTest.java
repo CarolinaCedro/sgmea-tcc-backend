@@ -169,7 +169,7 @@ class ChamadoServiceImplTest {
 
     @Test
     void atribuirChamado() {
-      
+
         ChamadoCriado chamadoCriado = new ChamadoCriado();
         chamadoCriado.setId("1");
         chamadoCriado.setFuncionario(new Funcionario());
