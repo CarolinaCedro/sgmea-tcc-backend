@@ -5,9 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.*;
 import tcc.sgmeabackend.model.enums.UserRole;
 import tcc.sgmeabackend.model.jackson.desserializer.ChamadoAtribuidoDesserializer;
 import tcc.sgmeabackend.model.jackson.serializer.ChamadoAtribuidoSerializer;
@@ -17,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Entity
@@ -38,14 +38,12 @@ public class Tecnico extends User {
 
 
 
+    @JsonIgnore
     @OneToMany(mappedBy = "tecnico", fetch = FetchType.EAGER)
     @JsonSerialize(using = ChamadoAtribuidoSerializer.class)
     @JsonDeserialize(using = ChamadoAtribuidoDesserializer.class)
     private List<ChamadoAtribuido> chamadoAtribuidos = new ArrayList<>();
 
-    public Tecnico() {
-        super();
-    }
 
     public Tecnico(String id, @NotNull(message = "O campo NOME é requerido") String nome, String cpf, String email, String resetToken, LocalDateTime resetTokenExpiryDate, Gestor gestor, Perfil perfil, String senha, UserRole role, List<Especialidade> especialidades, boolean disponibilidade, List<ChamadoAtribuido> chamadoAtribuidos) {
         super(id, nome, cpf, email, resetToken, resetTokenExpiryDate, gestor, perfil, senha, role);
