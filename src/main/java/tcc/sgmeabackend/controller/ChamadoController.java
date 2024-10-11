@@ -4,18 +4,23 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 import tcc.sgmeabackend.model.*;
 import tcc.sgmeabackend.model.dtos.ChamadoConsolidado;
 import tcc.sgmeabackend.model.enums.Status;
 import tcc.sgmeabackend.repository.ChamadoAtribuidoRepository;
+import tcc.sgmeabackend.repository.TecnicoRepository;
 import tcc.sgmeabackend.service.AbstractService;
 import tcc.sgmeabackend.service.EmailService;
 import tcc.sgmeabackend.service.exceptions.ResourceNotFoundException;
 import tcc.sgmeabackend.service.impl.ChamadoServiceImpl;
 import tcc.sgmeabackend.service.impl.FuncionarioServiceImpl;
 import tcc.sgmeabackend.service.impl.GestorServiceImpl;
+import tcc.sgmeabackend.service.impl.TecnicoServiceImpl;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,16 +39,18 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
 
     private final ChamadoAtribuidoRepository chamadoAtribuidoRepository;
     private final GestorServiceImpl gestorService;
+    private final TecnicoServiceImpl tecnicoService;
     private final FuncionarioServiceImpl funcionarioService;
 
     private final EmailService emailService;
 
-    public ChamadoController(ChamadoServiceImpl service, ModelMapper modelMapper, ModelMapper modelMapper1, ChamadoAtribuidoRepository chamadoAtribuidoRepository, GestorServiceImpl gestorService, FuncionarioServiceImpl funcionarioService, EmailService emailService) {
+    public ChamadoController(ChamadoServiceImpl service, ModelMapper modelMapper, ModelMapper modelMapper1, ChamadoAtribuidoRepository chamadoAtribuidoRepository, GestorServiceImpl gestorService, TecnicoServiceImpl tecnicoService, FuncionarioServiceImpl funcionarioService, EmailService emailService) {
         super(modelMapper);
         this.service = service;
         this.modelMapper = modelMapper1;
         this.chamadoAtribuidoRepository = chamadoAtribuidoRepository;
         this.gestorService = gestorService;
+        this.tecnicoService = tecnicoService;
         this.funcionarioService = funcionarioService;
         this.emailService = emailService;
     }
@@ -66,6 +73,38 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
         return ResponseEntity.ok(new PageableResource<>(records));
 
     }
+
+
+    @GetMapping("/chamados-atribuidos/byTecnico")
+    public ResponseEntity<PageableResource<ChamadoAtribuido>> chamadosAtribuidos(
+            @RequestParam String currentTecnico) {
+
+        // Verifica se o ID do técnico foi passado corretamente
+        if (currentTecnico == null || currentTecnico.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+        // Busca o técnico pelo ID fornecido
+        Optional<Tecnico> tecnicoOpt = tecnicoService.findById(currentTecnico);
+
+        // Se o técnico não for encontrado, retorna um erro 404
+        if (!tecnicoOpt.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        Tecnico currentTec = tecnicoOpt.get();
+        System.out.println("O técnico: " + currentTec.getNome());
+
+        // Filtra os chamados alocados apenas ao técnico logado
+        List<ChamadoAtribuido> chamadosFiltrados = this.service.findAllChamadosAlocados()
+                .stream()
+                .filter(chamado -> chamado.getTecnico().getId().equals(currentTec.getId()))
+                .collect(Collectors.toList());
+
+        // Retorna a lista filtrada
+        return ResponseEntity.ok(new PageableResource<>(chamadosFiltrados));
+    }
+
 
 
     @GetMapping("/list-advanced")
@@ -192,7 +231,7 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
         }
 
         Gestor gestor = gestorOpt.get();
-        emailService.chamadoCriado(funcionario.getEmail(), gestor.getEmail(), resource.getObservacoes(),gestorOpt.get().getNome(),funcionarioOpt.get().getNome());
+        emailService.chamadoCriado(funcionario.getEmail(), gestor.getEmail(), resource.getObservacoes(), gestorOpt.get().getNome(), funcionarioOpt.get().getNome());
 
 
         return super.create(resource);

@@ -37,7 +37,7 @@ public class Tecnico extends User {
     private boolean disponibilidade;
 
 
-
+    @JsonIgnore
     @OneToMany(mappedBy = "tecnico", fetch = FetchType.EAGER)
     @JsonSerialize(using = ChamadoAtribuidoSerializer.class)
     @JsonDeserialize(using = ChamadoAtribuidoDesserializer.class)

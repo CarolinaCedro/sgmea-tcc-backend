@@ -10,4 +10,5 @@ import java.util.List;
 public interface TecnicoRepository extends JpaRepository<Tecnico, String> {
     List<Tecnico> findByNomeContainingIgnoreCase(String nome);
 
+    Tecnico findByEmail(String emailTecnicoLogado);
 }

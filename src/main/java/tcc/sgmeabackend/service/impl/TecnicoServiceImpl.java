@@ -48,4 +48,8 @@ public class TecnicoServiceImpl extends AbstractService<Tecnico> {
         return this.tecnicoRepository.findByNomeContainingIgnoreCase(nome);
 
     }
+
+    public Tecnico findByEmail(String emailTecnicoLogado) {
+        return this.tecnicoRepository.findByEmail(emailTecnicoLogado);
+    }
 }
