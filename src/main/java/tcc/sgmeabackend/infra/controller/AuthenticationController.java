@@ -63,6 +63,7 @@ public class AuthenticationController {
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.senha());
 
         User newUser = new User(null, data.nome(), data.cpf(), data.email(), encryptedPassword, data.role(), data.perfil());
+        System.out.println("user que vem pra salvar" + data);
 
         try {
             if (data.perfil().equals(Perfil.FUNCIONARIO)) {
@@ -98,9 +99,9 @@ public class AuthenticationController {
                 tecnico.setNome(newUser.getNome());
                 tecnico.setEmail(newUser.getEmail());
                 tecnico.setSenha(newUser.getSenha());
+                tecnico.setGestor(newUser.getGestor());
                 tecnico.setChamadoAtribuidos(null);
                 tecnico.setDisponibilidade(true);
-                tecnico.setEspecialidades(null);
                 tecnico.setRole(newUser.getRole());
                 tecnico.setPerfil(newUser.getPerfil());
                 this.tecnicoRepository.save(tecnico);
@@ -115,6 +116,8 @@ public class AuthenticationController {
             // Captura de exceção no envio do e-mail
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao enviar o e-mail: " + e.getMessage());
         } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("erroooooooooooooooooo" + e.getMessage());
             return ResponseEntity.badRequest().build();
         }
 
