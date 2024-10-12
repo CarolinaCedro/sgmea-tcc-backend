@@ -1,5 +1,8 @@
 package tcc.sgmeabackend.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -48,6 +51,7 @@ public class User implements UserDetails {
     @JsonIgnore
     private LocalDateTime resetTokenExpiryDate;
 
+
     @ManyToOne
     @JoinColumn(name = "gestor_id")
     @JsonSerialize(using = GestorSerializer.class)
@@ -58,10 +62,9 @@ public class User implements UserDetails {
     private Perfil perfil;
 
 
-    @JsonIgnore
     private String senha;
 
-    @JsonIgnore
+
     private UserRole role;
 
 
@@ -75,7 +78,13 @@ public class User implements UserDetails {
         this.perfil = perfil;
     }
 
+    public User(String id, String nome) {
+        this.id = id;
+        this.nome = nome;
+    }
+
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.role == UserRole.ADMIN) {
             return List.of(
@@ -108,6 +117,13 @@ public class User implements UserDetails {
         }
 
         return List.of(new SimpleGrantedAuthority("ROLE_FUNCIONARIO"));
+    }
+
+    @JsonProperty("authorities")
+    public List<String> getRoles() {
+        return getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
     }
 
 

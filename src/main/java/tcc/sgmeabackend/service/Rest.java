@@ -2,6 +2,7 @@ package tcc.sgmeabackend.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface Rest<T> {
 
@@ -17,4 +18,5 @@ public interface Rest<T> {
     void delete(String id);
 
 
+    Set<T> findByIds(String[] ids);
 }

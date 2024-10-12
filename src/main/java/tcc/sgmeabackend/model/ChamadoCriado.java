@@ -1,6 +1,8 @@
 package tcc.sgmeabackend.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,12 +12,13 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UuidGenerator;
 import tcc.sgmeabackend.model.enums.Prioridade;
 import tcc.sgmeabackend.model.enums.Status;
+import tcc.sgmeabackend.model.jackson.desserializer.EquipamentoDesserializer;
+import tcc.sgmeabackend.model.jackson.desserializer.FuncionarioDesserializer;
+import tcc.sgmeabackend.model.jackson.serializer.EquipamentoSerializer;
+import tcc.sgmeabackend.model.jackson.serializer.FuncionarioSerializer;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Entity
@@ -32,12 +35,18 @@ public class ChamadoCriado implements Serializable {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataFechamento;
 
-    private Prioridade prioridade;
+    @Enumerated(EnumType.ORDINAL)
     private Status status;
+
+    private boolean alocado;
+
+    private Prioridade prioridade;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "equipamento_id")
+    @JsonSerialize(using = EquipamentoSerializer.class)
+    @JsonDeserialize(using = EquipamentoDesserializer.class)
     private Equipamento equipamento;
 
     private String titulo;
@@ -47,5 +56,13 @@ public class ChamadoCriado implements Serializable {
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "funcionario_id")
+    @JsonSerialize(using = FuncionarioSerializer.class)
+    @JsonDeserialize(using = FuncionarioDesserializer.class)
     private Funcionario funcionario;
+
+
+    public ChamadoCriado(String funcionarioNaoEncontrado) {
+        throw new RuntimeException(funcionarioNaoEncontrado);
+    }
+
 }

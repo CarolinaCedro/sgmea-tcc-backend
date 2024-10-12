@@ -23,7 +23,7 @@
         }
 
         .header {
-            background-color: #4CAF50;
+            background-color: #2563EB;
             color: white;
             padding: 20px;
             text-align: center;
@@ -31,14 +31,48 @@
             border-top-right-radius: 8px;
         }
 
+        .header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
         .content {
             padding: 20px;
             text-align: left;
-            line-height: 1.6;
+            line-height: 1.8;
+        }
+
+        .content p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .content h4 {
+            font-size: 18px;
+            color: #2563EB;
+            margin-bottom: 10px;
+        }
+
+        .highlight {
+            background-color: #f0f8ff;
+            padding: 10px;
+            border-left: 4px solid #2563EB;
+            margin: 20px 0;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #2563EB;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 20px;
+            font-size: 16px;
         }
 
         .footer {
-            background-color: #4CAF50;
+            background-color: #2563EB;
             color: white;
             text-align: center;
             padding: 10px;
@@ -48,6 +82,7 @@
 
         .footer p {
             margin: 0;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -59,10 +94,19 @@
     <div class="content">
         <p>Prezado(a),</p>
         <p>Um novo chamado foi criado em nosso sistema com a seguinte descrição:</p>
-        <p>#{Descrição}</p>
-        <p>Data: #{data}</p>
-        <p>Funcionário: #{funcionario}</p>
+
+        <div class="highlight">
+            <h4>#{Descrição}</h4>
+        </div>
+
+        <p><strong>Data: </strong> #{data}</p>
+        <p><strong>Funcionário: </strong> #{funcionario}</p>
         <p>O gestor responsável já foi notificado e deve entrar no sistema para fazer as devidas atribuições.</p>
+
+        <!--- Todo Passar o a url correta depois do deploy !-->
+
+        <a href="http://localhost:4200/auth/sign-in" class="button">Acessar o Sistema</a>
+
         <p>Obrigado por registrar o chamado!</p>
     </div>
     <div class="footer">

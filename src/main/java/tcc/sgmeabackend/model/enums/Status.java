@@ -2,35 +2,31 @@ package tcc.sgmeabackend.model.enums;
 
 public enum Status {
 
-	ABERTO(0, "ABERTO"), ANDAMENTO(1, "ANDAMENTO"), ENCERRADO(2, "ENCERRADO");
-	
-	private Integer codigo;
-	private String descricao;
-	
-	private Status(Integer codigo, String descricao) {
-		this.codigo = codigo;
-		this.descricao = descricao;
-	}
+    ABERTO(0, "ABERTO"), ANDAMENTO(1, "ANDAMENTO"), ENCERRADO(2, "ENCERRADO"), CONCLUIDO(3, "CONCLUIDO");
 
-	public Integer getCodigo() {
-		return codigo;
-	}
+    private String descricao;
 
-	public String getDescricao() {
-		return descricao;
-	}
-	
-	public static Status toEnum(Integer cod) {
-		if(cod == null) {
-			return null;
-		}
-		
-		for(Status x : Status.values()) {
-			if(cod.equals(x.getCodigo())) {
-				return x;
-			}
-		}
-		
-		throw new IllegalArgumentException("Status inválido");
-	}
+    private Status(Integer codigo, String descricao) {
+        this.codigo = codigo;
+        this.descricao = descricao;
+    }
+
+    private final int codigo;
+
+    Status(int codigo) {
+        this.codigo = codigo;
+    }
+
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public static Status fromCodigo(int codigo) {
+        for (Status status : Status.values()) {
+            if (status.getCodigo() == codigo) {
+                return status;
+            }
+        }
+        throw new IllegalArgumentException("Código de status inválido: " + codigo);
+    }
 }

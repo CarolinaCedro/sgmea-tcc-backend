@@ -4,63 +4,180 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 import tcc.sgmeabackend.model.*;
-import tcc.sgmeabackend.model.dtos.ChamadoAtribuidoDto;
 import tcc.sgmeabackend.model.dtos.ChamadoConsolidado;
-import tcc.sgmeabackend.model.dtos.ChamadoCriadoResponse;
 import tcc.sgmeabackend.model.enums.Status;
 import tcc.sgmeabackend.repository.ChamadoAtribuidoRepository;
+import tcc.sgmeabackend.repository.TecnicoRepository;
 import tcc.sgmeabackend.service.AbstractService;
 import tcc.sgmeabackend.service.EmailService;
 import tcc.sgmeabackend.service.exceptions.ResourceNotFoundException;
 import tcc.sgmeabackend.service.impl.ChamadoServiceImpl;
 import tcc.sgmeabackend.service.impl.FuncionarioServiceImpl;
 import tcc.sgmeabackend.service.impl.GestorServiceImpl;
+import tcc.sgmeabackend.service.impl.TecnicoServiceImpl;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/sgmea/v1/chamado")
-public class ChamadoController extends AbstractController<ChamadoCriado, ChamadoCriadoResponse> {
+public class ChamadoController extends AbstractController<ChamadoCriado, ChamadoCriado> {
 
     private final ChamadoServiceImpl service;
 
+    public final ModelMapper modelMapper;
+
+
     private final ChamadoAtribuidoRepository chamadoAtribuidoRepository;
     private final GestorServiceImpl gestorService;
+    private final TecnicoServiceImpl tecnicoService;
     private final FuncionarioServiceImpl funcionarioService;
 
     private final EmailService emailService;
 
-    public ChamadoController(ChamadoServiceImpl service, ModelMapper modelMapper, ChamadoAtribuidoRepository chamadoAtribuidoRepository, GestorServiceImpl gestorService, FuncionarioServiceImpl funcionarioService, EmailService emailService) {
+    public ChamadoController(ChamadoServiceImpl service, ModelMapper modelMapper, ModelMapper modelMapper1, ChamadoAtribuidoRepository chamadoAtribuidoRepository, GestorServiceImpl gestorService, TecnicoServiceImpl tecnicoService, FuncionarioServiceImpl funcionarioService, EmailService emailService) {
         super(modelMapper);
         this.service = service;
+        this.modelMapper = modelMapper1;
         this.chamadoAtribuidoRepository = chamadoAtribuidoRepository;
         this.gestorService = gestorService;
+        this.tecnicoService = tecnicoService;
         this.funcionarioService = funcionarioService;
         this.emailService = emailService;
     }
 
     @PostMapping("/atribuir-chamado")
-    public void atribuirChamado(@RequestBody ChamadoAtribuidoDto chamadoAtribuidoDto) {
+    public void atribuirChamado(@RequestBody ChamadoAtribuido chamadoAtribuidoDto) {
         this.service.atribuirChamado(chamadoAtribuidoDto);
 
     }
 
+
+    @GetMapping("/chamados-atribuidos/{id}")
+    public ResponseEntity<Optional<ChamadoAtribuido>> chamadoAtribuidoById(@PathVariable String id) {
+        return ResponseEntity.ok(this.chamadoAtribuidoRepository.findById(id));
+    }
+
     @GetMapping("/chamados-atribuidos")
-    public ResponseEntity<List<ChamadoAtribuido>> chamadoAtribuidos() {
-        return ResponseEntity.ok(this.chamadoAtribuidoRepository.findAll());
+    public ResponseEntity<PageableResource<ChamadoAtribuido>> chamadoAtribuidos() {
+        final List<ChamadoAtribuido> records = this.service.findAllChamadosAlocados();
+        return ResponseEntity.ok(new PageableResource<>(records));
+
+    }
+
+
+    @GetMapping("/chamados-atribuidos/byTecnico")
+    public ResponseEntity<PageableResource<ChamadoAtribuido>> chamadosAtribuidos(
+            @RequestParam String currentTecnico) {
+
+        // Verifica se o ID do técnico foi passado corretamente
+        if (currentTecnico == null || currentTecnico.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+        // Busca o técnico pelo ID fornecido
+        Optional<Tecnico> tecnicoOpt = tecnicoService.findById(currentTecnico);
+
+        // Se o técnico não for encontrado, retorna um erro 404
+        if (!tecnicoOpt.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        Tecnico currentTec = tecnicoOpt.get();
+        System.out.println("O técnico: " + currentTec.getNome());
+
+        // Filtra os chamados alocados apenas ao técnico logado
+        List<ChamadoAtribuido> chamadosFiltrados = this.service.findAllChamadosAlocados()
+                .stream()
+                .filter(chamado -> chamado.getTecnico().getId().equals(currentTec.getId()))
+                .collect(Collectors.toList());
+
+        // Retorna a lista filtrada
+        return ResponseEntity.ok(new PageableResource<>(chamadosFiltrados));
+    }
+
+
+
+    @GetMapping("/list-advanced")
+    public ResponseEntity<PageableResource<ChamadoCriado>> listAdvanced(
+            @RequestParam(name = "titulo", required = false) String titulo) {
+
+        List<Status> status = Arrays.asList(Status.ENCERRADO, Status.CONCLUIDO);
+        List<String> listStringStatus = Arrays.asList(Status.ENCERRADO.toString(), Status.CONCLUIDO.toString());
+
+
+        List<ChamadoCriado> list;
+
+        // Verifica se o titulo está vazio ou nulo
+        if (titulo != null && !titulo.trim().isEmpty()) {
+            // Se o titulo não for nulo ou vazio, realiza a busca pelo titulo
+            list = this.service.findAllByTituloContainingAndStatusNotInAndAlocadoFalse(titulo, status);
+        } else {
+            // Se o nome for nulo ou vazio, retorna todos os funcionários
+            list = this.service.findAllByStatusNotAndAlocadoFalse(status);
+        }
+
+        return ResponseEntity.ok(new PageableResource<>(list));
     }
 
 
     @Override
     @GetMapping
-    public ResponseEntity<PageableResource<ChamadoCriadoResponse>> list(HttpServletResponse response, Map<String, String> allRequestParams) {
-        Status statusToExclude = Status.ENCERRADO;
-        return ResponseEntity.ok(toPageableResource(statusToExclude));
+    public ResponseEntity<PageableResource<ChamadoCriado>> list(HttpServletResponse response, Map<String, String> allRequestParams) {
+        List<Status> status = Arrays.asList(Status.ENCERRADO, Status.CONCLUIDO);
+
+        final List<ChamadoCriado> records = this.service.findAllByStatusNotAndAlocadoFalse(status);
+        return ResponseEntity.ok(new PageableResource<>(records));
+    }
+
+    @GetMapping("/chamados-encerrados")
+    public ResponseEntity<PageableResource<ChamadoCriado>> chamadosEncerrados() {
+        List<ChamadoCriado> chamados = this.service.getChamadosEncerrados();
+        return ResponseEntity.ok(new PageableResource(chamados));
+    }
+
+    @GetMapping("/chamados-encerrados/list-advanced")
+    public ResponseEntity<PageableResource<ChamadoCriado>> listAdvancedByConcluido(
+            @RequestParam(name = "titulo", required = false) String titulo) {
+
+        List<ChamadoCriado> list;
+
+        // Cria uma lista com os status ENCERRADO e CONCLUIDO
+        List<Status> statusEncerrados = Arrays.asList(Status.ENCERRADO, Status.CONCLUIDO);
+
+        // Verifica se o titulo está vazio ou nulo
+        if (titulo != null && !titulo.trim().isEmpty()) {
+            // Se o titulo não for nulo ou vazio, realiza a busca por título e status "Encerrado/Concluído"
+            list = this.service.findByTituloContainingAndStatusIn(titulo, statusEncerrados);
+        } else {
+            // Se o título for nulo ou vazio, retorna todos os chamados com status "Encerrado/Concluído"
+            list = this.service.getChamadosEncerrados();
+        }
+
+        return ResponseEntity.ok(new PageableResource<>(list));
+    }
+
+
+    @GetMapping("/chamados-concluidos")
+    public ResponseEntity<PageableResource<ChamadoReportResponse>> chamadosConcluidos() {
+
+        List<ChamadoCriado> chamados = this.service.getChamadosConcluidos();
+
+        // Mapeando cada ChamadoCriado para ChamadoReportResponse
+        List<ChamadoReportResponse> chamadosResponse = chamados.stream()
+                .map(chamado -> modelMapper.map(chamado, ChamadoReportResponse.class))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(new PageableResource<>(chamadosResponse));
     }
 
 
@@ -84,21 +201,24 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
     }
 
 
-    @PatchMapping("/consolidacao-chamado")
-    public ResponseEntity<ChamadoConsolidado> consolidarChamado(@RequestBody ChamadoAtribuido chamadoCriado) {
+    @PutMapping("/consolidacao-chamado/{id}")
+    public ResponseEntity<ChamadoConsolidado> consolidarChamado(@PathVariable String id, @RequestBody String observacaoConsolidacao) {
+        ChamadoConsolidado consolidado = this.service.consolidarChamado(id, observacaoConsolidacao);
 
-        return ResponseEntity.ok(this.service.consolidarChamado(chamadoCriado));
+        if (consolidado == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(consolidado);
     }
 
-
     @Override
-    public ResponseEntity<ChamadoCriadoResponse> create(@RequestBody ChamadoCriado resource) {
+    public ResponseEntity<ChamadoCriado> create(@RequestBody ChamadoCriado resource) {
         String funcionarioId = resource.getFuncionario().getId();
         Optional<Funcionario> funcionarioOpt = funcionarioService.findById(funcionarioId);
 
         if (funcionarioOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ChamadoCriadoResponse("Funcionário não encontrado"));
+                    .body(new ChamadoCriado("Funcionário não encontrado"));
         }
 
         Funcionario funcionario = funcionarioOpt.get();
@@ -107,26 +227,20 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
 
         if (gestorOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ChamadoCriadoResponse("Funcionário não encontrado"));
+                    .body(new ChamadoCriado("Funcionário não encontrado"));
         }
 
         Gestor gestor = gestorOpt.get();
-        emailService.chamadoCriado(funcionario.getEmail(), gestor.getEmail());
+        emailService.chamadoCriado(funcionario.getEmail(), gestor.getEmail(), resource.getObservacoes(), gestorOpt.get().getNome(), funcionarioOpt.get().getNome());
 
 
         return super.create(resource);
     }
 
-    @GetMapping("/chamados-encerrados")
-    public ResponseEntity<List<ChamadoCriado>> chamadosEncerrados() {
-        List<ChamadoCriado> chamados = this.service.getChamadosEncerrados();
-        return ResponseEntity.ok(chamados);
-    }
-
 
     @Override
-    protected Class<ChamadoCriadoResponse> getDtoClass() {
-        return ChamadoCriadoResponse.class;
+    protected Class<ChamadoCriado> getDtoClass() {
+        return ChamadoCriado.class;
     }
 
     @Override
