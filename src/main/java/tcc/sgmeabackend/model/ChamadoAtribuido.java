@@ -22,11 +22,12 @@ import tcc.sgmeabackend.model.jackson.serializer.TecnicoSerializer;
 
 import java.io.Serializable;
 
-@Table
+
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "chamado_atribuido")
 public class ChamadoAtribuido implements Serializable {
 
     @Id

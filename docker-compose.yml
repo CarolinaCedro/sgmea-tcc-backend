@@ -1,7 +1,37 @@
 version: '3.7'
 
 services:
-  db:
+  sgmea-backend:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/sgmea-db?allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=123456
+      - SPRING_DATASOURCE_DRIVER=com.mysql.cj.jdbc.Driver
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=validate
+
+      # Configurações de email
+      - SPRING_MAIL_HOST=smtp.gmail.com
+      - SPRING_MAIL_PORT=587
+      - SPRING_MAIL_USERNAME=manobixagency@gmail.com
+      - SPRING_MAIL_PASSWORD=hwnt hvio sngi qtjn
+      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH=true
+      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE=true
+
+      # Configurações do Flyway
+      - SPRING_FLYWAY_ENABLED=false
+
+      # JWT
+      - JWT_SECRET=minha-chave-secreta
+
+    depends_on:
+      - mysql-db
+    networks:
+      - sgmea-network
+
+  mysql-db:
     image: mysql:latest
     restart: always
     environment:
@@ -9,8 +39,9 @@ services:
       MYSQL_DATABASE: sgmea-db
     ports:
       - "3306:3306"
-    volumes:
-      - db_data:/var/lib/mysql
+    networks:
+      - sgmea-network
 
-volumes:
-  db_data:
+networks:
+  sgmea-network:
+    driver: bridge
