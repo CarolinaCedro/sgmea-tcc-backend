@@ -1,5 +1,5 @@
 # Use uma imagem base do Maven com Amazon Corretto 17
-FROM maven:3.8.6-amazoncorretto-17 as build
+FROM maven:3.8.6-amazoncorretto-17 AS build
 
 # Diretório de trabalho no contêiner
 WORKDIR /app
