@@ -3,6 +3,7 @@ version: '3.7'
 services:
   mysql-db:
     image: mysql:latest
+    container_name: mysql-db
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 123456
@@ -13,6 +14,7 @@ services:
       - sgmea-network
 
   sgmea-backend:
+    container_name: sgmea-backend
     build: .
     ports:
       - "8080:8080"
