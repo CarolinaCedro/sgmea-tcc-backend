@@ -8,8 +8,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: 123456
       MYSQL_DATABASE: sgmea-db
-    ports:
-      - "3306:3306"
+#    ports:
+#      - "3306:3306"
     networks:
       - sgmea-network
 
@@ -20,23 +20,9 @@ services:
       - "8080:8080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/sgmea-db?allowPublicKeyRetrieval=true
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 123456
-      SPRING_DATASOURCE_DRIVER: com.mysql.cj.jdbc.Driver
-      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
-      SPRING_MAIL_HOST: smtp.gmail.com
-      SPRING_MAIL_PORT: 587
-      SPRING_MAIL_USERNAME: manobixagency@gmail.com
-      SPRING_MAIL_PASSWORD: hwnt hvio sngi qtjn
-      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: true
-      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: true
-      SPRING_FLYWAY_ENABLED: false
-      JWT_SECRET: minha-chave-secreta
-    depends_on:
-      - mysql-db
+
     networks:
       - sgmea-network
-    command: ["java", "-jar", "/app/sgmea-backend-0.0.1-SNAPSHOT.jar"]  # Linha adicionada
 
 networks:
   sgmea-network:
