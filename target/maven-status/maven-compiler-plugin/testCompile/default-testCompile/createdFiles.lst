@@ -1,0 +1,16 @@
+tcc/sgmeabackend/controller/UserControllerTest.class
+tcc/sgmeabackend/service/impl/DepartamentoServiceImplTest.class
+tcc/sgmeabackend/service/impl/EquipamentoServiceImplTest.class
+tcc/sgmeabackend/service/impl/GestorServiceImplTest.class
+tcc/sgmeabackend/controller/DepartamentoControllerTest.class
+tcc/sgmeabackend/controller/GestorControllerTest.class
+tcc/sgmeabackend/SgmeaBackendApplicationTests.class
+tcc/sgmeabackend/service/impl/TecnicoServiceImplTest.class
+tcc/sgmeabackend/service/impl/ChamadoServiceImplTest.class
+tcc/sgmeabackend/controller/EquipamentoControllerTest.class
+tcc/sgmeabackend/service/impl/FuncionarioServiceImplTest.class
+tcc/sgmeabackend/service/impl/ChamadoReportServiceImplTest.class
+tcc/sgmeabackend/controller/TecnicoControllerTest.class
+tcc/sgmeabackend/controller/FuncionarioControllerTest.class
+tcc/sgmeabackend/service/impl/UserServiceImplTest.class
+tcc/sgmeabackend/controller/ChamadoControllerTest.class
