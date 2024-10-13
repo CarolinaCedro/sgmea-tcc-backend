@@ -1,0 +1,16 @@
+/home/pc/Documentos/TCC/sgmea-tcc-backend/src/test/java/tcc/sgmeabackend/controller/DepartamentoControllerTest.java
+/home/pc/Documentos/TCC/sgmea-tcc-backend/src/test/java/tcc/sgmeabackend/service/impl/FuncionarioServiceImplTest.java
+/home/pc/Documentos/TCC/sgmea-tcc-backend/src/test/java/tcc/sgmeabackend/SgmeaBackendApplicationTests.java
+/home/pc/Documentos/TCC/sgmea-tcc-backend/src/test/java/tcc/sgmeabackend/service/impl/ChamadoServiceImplTest.java
+/home/pc/Documentos/TCC/sgmea-tcc-backend/src/test/java/tcc/sgmeabackend/service/impl/TecnicoServiceImplTest.java
+/home/pc/Documentos/TCC/sgmea-tcc-backend/src/test/java/tcc/sgmeabackend/controller/TecnicoControllerTest.java
+/home/pc/Documentos/TCC/sgmea-tcc-backend/src/test/java/tcc/sgmeabackend/service/impl/ChamadoReportServiceImplTest.java
+/home/pc/Documentos/TCC/sgmea-tcc-backend/src/test/java/tcc/sgmeabackend/service/impl/UserServiceImplTest.java
+/home/pc/Documentos/TCC/sgmea-tcc-backend/src/test/java/tcc/sgmeabackend/controller/ChamadoControllerTest.java
+/home/pc/Documentos/TCC/sgmea-tcc-backend/src/test/java/tcc/sgmeabackend/controller/FuncionarioControllerTest.java
+/home/pc/Documentos/TCC/sgmea-tcc-backend/src/test/java/tcc/sgmeabackend/service/impl/DepartamentoServiceImplTest.java
+/home/pc/Documentos/TCC/sgmea-tcc-backend/src/test/java/tcc/sgmeabackend/controller/GestorControllerTest.java
+/home/pc/Documentos/TCC/sgmea-tcc-backend/src/test/java/tcc/sgmeabackend/service/impl/EquipamentoServiceImplTest.java
+/home/pc/Documentos/TCC/sgmea-tcc-backend/src/test/java/tcc/sgmeabackend/controller/EquipamentoControllerTest.java
+/home/pc/Documentos/TCC/sgmea-tcc-backend/src/test/java/tcc/sgmeabackend/service/impl/GestorServiceImplTest.java
+/home/pc/Documentos/TCC/sgmea-tcc-backend/src/test/java/tcc/sgmeabackend/controller/UserControllerTest.java
