@@ -11,25 +11,19 @@ services:
       - SPRING_DATASOURCE_PASSWORD=123456
       - SPRING_DATASOURCE_DRIVER=com.mysql.cj.jdbc.Driver
       - SPRING_JPA_HIBERNATE_DDL_AUTO=validate
-
-      # Configurações de email
       - SPRING_MAIL_HOST=smtp.gmail.com
       - SPRING_MAIL_PORT=587
       - SPRING_MAIL_USERNAME=manobixagency@gmail.com
       - SPRING_MAIL_PASSWORD=hwnt hvio sngi qtjn
       - SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH=true
       - SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE=true
-
-      # Configurações do Flyway
       - SPRING_FLYWAY_ENABLED=false
-
-      # JWT
       - JWT_SECRET=minha-chave-secreta
-
     depends_on:
       - mysql-db
     networks:
       - sgmea-network
+    command: ["java", "-jar", "/app/sgmea-backend-0.0.1-SNAPSHOT.jar"]  # Linha adicionada
 
   mysql-db:
     image: mysql:latest
