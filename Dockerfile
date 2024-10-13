@@ -28,17 +28,12 @@ WORKDIR /app
 # Copia o arquivo JAR gerado pela compilação para o contêiner
 COPY --from=build /app/target/sgmea-backend-0.0.1-SNAPSHOT.jar /app/sgmea-backend-0.0.1-SNAPSHOT.jar
 
-# Variáveis de ambiente para conexão com o MySQL no Railway
-ENV SPRING_DATASOURCE_URL="jdbc:mysql://localhost:3306/sgmea_db?allowPublicKeyRetrieval=true"
-ENV SPRING_DATASOURCE_USERNAME=root
-ENV SPRING_DATASOURCE_PASSWORD=123456
-ENV SPRING_PROFILES_ACTIVE=prod
 
 # Use a variável de ambiente PORT para a aplicação escutar a porta correta
-ENV SERVER_PORT=8080
+ENV SERVER_PORT=8083
 
 # Exponha a porta onde o aplicativo irá rodar (a aplicação irá ler a variável PORT definida pela plataforma)
-EXPOSE 8080
+EXPOSE 8083
 
 # Comando para rodar a aplicação
 CMD ["/bin/sh", "-c", "exec java -jar /app/sgmea-backend-0.0.1-SNAPSHOT.jar"]
