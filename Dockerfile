@@ -32,7 +32,7 @@ COPY --from=build /app/target/sgmea-backend-0.0.1-SNAPSHOT.jar /app/sgmea-backen
 ENV SPRING_DATASOURCE_URL="jdbc:mysql://${MYSQLHOST}:${MYSQLPORT}/${MYSQLDATABASE}?allowPublicKeyRetrieval=true&useSSL=false"
 ENV SPRING_DATASOURCE_USERNAME=${MYSQLUSER}
 ENV SPRING_DATASOURCE_PASSWORD=${MYSQLPASSWORD}
-ENV SPRING_PROFILES_ACTIVE=${spring_profiles_active:-prod}  
+ENV SPRING_PROFILES_ACTIVE=${spring_profiles_active:-prod}
 
 # Use a variável de ambiente PORT para a aplicação escutar a porta correta
 ENV SERVER_PORT=${PORT:-8080}
