@@ -41,4 +41,4 @@ ENV SERVER_PORT=${PORT:-8080}
 EXPOSE 8080
 
 # Comando para rodar a aplicação
-CMD ["java", "-jar", "/app/sgmea-backend-0.0.1-SNAPSHOT.jar"]
+CMD ["/bin/sh", "-c", "exec java -jar /app/sgmea-backend-0.0.1-SNAPSHOT.jar"]
