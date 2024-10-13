@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 
 @SpringBootApplication
+@EnableJpaRepositories(basePackages = "tcc.sgmeabackend.repository")
 public class SgmeaBackendApplication {
 
     protected static final Logger logger = LogManager.getLogger();
