@@ -1,10 +1,22 @@
 version: '3.7'
 
 services:
+  mysql-db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: sgmea-db
+    ports:
+      - "3306:3306"
+    networks:
+      - sgmea-network
+
+
   sgmea-backend:
     build: .
     ports:
-      - "8083:8080"
+      - "8080:8080"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/sgmea-db?allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=root
@@ -25,16 +37,6 @@ services:
       - sgmea-network
     command: ["java", "-jar", "/app/sgmea-backend-0.0.1-SNAPSHOT.jar"]  # Linha adicionada
 
-  mysql-db:
-    image: mysql:latest
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: sgmea-db
-    ports:
-      - "3306:3306"
-    networks:
-      - sgmea-network
 
 networks:
   sgmea-network:
