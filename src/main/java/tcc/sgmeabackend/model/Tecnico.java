@@ -30,6 +30,7 @@ public class Tecnico extends User {
             joinColumns = @JoinColumn(name = "tecnico_id"),
             inverseJoinColumns = @JoinColumn(name = "especialidade_id")
     )
+    @JsonIgnore
 //    @JsonSerialize(using = EquipamentoSerializer.class)
 //    @JsonDeserialize(using = EspecialidadeDesserializer.class)
     private List<Especialidade> especialidades = new ArrayList<>();
