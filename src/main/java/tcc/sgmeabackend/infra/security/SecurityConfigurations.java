@@ -36,6 +36,7 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/api/sgmea/v1/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/sgmea/v1/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.GET, "api/sgmea/v1/auth/ping").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/sgmea/v1/users/reset-password").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/sgmea/v1/users/forgot-password").permitAll()
                         .requestMatchers(HttpMethod.GET, "/swagger-ui/**", "/v3/api-docs/**").permitAll()
@@ -65,8 +66,8 @@ public class SecurityConfigurations {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200")); // Origens permitidas
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT","PATCH", "DELETE")); // Métodos permitidos
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://ec2-3-81-92-145.compute-1.amazonaws.com")); // Origens permitidas
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE")); // Métodos permitidos
         configuration.setAllowedHeaders(Arrays.asList("*")); // Cabeçalhos permitidos
         configuration.setAllowCredentials(true); // Permitir credenciais
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
