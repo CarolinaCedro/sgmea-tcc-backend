@@ -66,7 +66,11 @@ public class SecurityConfigurations {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://ec2-3-208-47-127.compute-1.amazonaws.com:8083")); // Origens permitidas
+        configuration.setAllowedOrigins(Arrays.asList(
+                "http://localhost:4200",
+                "http://ec2-3-208-47-127.compute-1.amazonaws.com:8083",
+                "https://sgmea-tcc-frontend-px0vxecpp-carolinacedros-projects.vercel.app"
+        )); // Adicionando a URL da Vercel
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE")); // Métodos permitidos
         configuration.setAllowedHeaders(Arrays.asList("*")); // Cabeçalhos permitidos
         configuration.setAllowCredentials(true); // Permitir credenciais
