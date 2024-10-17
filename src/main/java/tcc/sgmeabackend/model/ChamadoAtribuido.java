@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.CalendarSerializer;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,12 +38,16 @@ public class ChamadoAtribuido implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "chamado_criado_id", unique = true)
+    @NotNull(message = "O campo chamadoCriado é requerido")
+    @NotEmpty
     @JsonSerialize(using = ChamadoSerializer.class)
     @JsonDeserialize(using = ChamadoCriadoDesserializer.class)
     private ChamadoCriado chamadoCriado;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @NotNull(message = "O campo tecnico é requerido")
+    @NotEmpty
     @JoinColumn(name = "tecnico_id")
     @JsonSerialize(using = TecnicoSerializer.class)
     @JsonDeserialize(using = TecnicoDesserializer.class)
@@ -49,10 +55,14 @@ public class ChamadoAtribuido implements Serializable {
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @NotNull(message = "O campo gestor é requerido")
+    @NotEmpty
     @JoinColumn(name = "gestor_id")
     @JsonSerialize(using = GestorSerializer.class)
     @JsonDeserialize(using = GestorDesserializer.class)
     private Gestor gestor;
 
+    @NotNull(message = "O campo prioridade é requerido")
+    @NotEmpty
     private Prioridade prioridade;
 }

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,6 +38,8 @@ public class ChamadoCriado implements Serializable {
     private LocalDate dataFechamento;
 
     @Enumerated(EnumType.ORDINAL)
+    @NotNull(message = "O campo status é requerido")
+    @NotEmpty
     private Status status;
 
     private boolean alocado;
@@ -49,6 +53,8 @@ public class ChamadoCriado implements Serializable {
     @JsonDeserialize(using = EquipamentoDesserializer.class)
     private Equipamento equipamento;
 
+    @NotNull(message = "O campo titulo é requerido")
+    @NotEmpty
     private String titulo;
     private String observacaoConsolidacao;
     private String observacoes;

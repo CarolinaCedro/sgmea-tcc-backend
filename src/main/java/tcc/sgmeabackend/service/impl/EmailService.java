@@ -1,4 +1,4 @@
-package tcc.sgmeabackend.service;
+package tcc.sgmeabackend.service.impl;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -25,6 +25,7 @@ public class EmailService {
 
     private final JavaMailSender javaMailSender;
     private final ChamadoCriadoRepository chamadoCriadoRepository;
+
 
     public void boasVindas(EmailDto emailDto) {
         try {

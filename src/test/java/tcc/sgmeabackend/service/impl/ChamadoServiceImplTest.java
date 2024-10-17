@@ -13,7 +13,6 @@ import tcc.sgmeabackend.repository.ChamadoAtribuidoRepository;
 import tcc.sgmeabackend.repository.ChamadoCriadoRepository;
 import tcc.sgmeabackend.repository.GestorRepository;
 import tcc.sgmeabackend.repository.TecnicoRepository;
-import tcc.sgmeabackend.service.EmailService;
 
 import java.util.*;
 

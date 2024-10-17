@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 import tcc.sgmeabackend.notifications.model.EmailDto;
-import tcc.sgmeabackend.service.EmailService;
+import tcc.sgmeabackend.service.impl.EmailService;
 
 @RestController
 @PermitAll

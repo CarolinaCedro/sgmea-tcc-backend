@@ -5,6 +5,8 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,9 +23,13 @@ public class Equipamento {
     @Id
     @UuidGenerator
     private String id;
+    @NotNull(message = "O campo nome é requerido")
+    @NotEmpty
     private String nome;
     private String descricao;
     private String patrimonio;
+    @NotNull(message = "O campo nome do fabricante é requerido")
+    @NotEmpty
     private String fabricante;
     private String modelo;
     private boolean emUso;
