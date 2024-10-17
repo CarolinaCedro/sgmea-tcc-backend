@@ -68,7 +68,7 @@ public class SecurityConfigurations {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:4200",
-                "https://ec2-3-208-47-127.compute-1.amazonaws.com:8083", // Mudando para HTTPS
+                "https://ec2-3-208-47-127.compute-1.amazonaws.com", // Mudando para HTTPS
                 "https://sgmea-tcc-frontend-px0vxecpp-carolinacedros-projects.vercel.app" // URL da Vercel já está com HTTPS
         )); // Adicionando a URL da Vercel
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE")); // Métodos permitidos
