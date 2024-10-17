@@ -66,8 +66,6 @@ public class SecurityConfigurations {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200")); // Origens permitidas
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT","PATCH", "DELETE")); // Métodos permitidos
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:4200",
                 "https://ec2-3-208-47-127.compute-1.amazonaws.com", // Mudando para HTTPS
