@@ -56,6 +56,12 @@ public class AuthenticationController {
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
+
+    @GetMapping("/ping")
+    public String ping() {
+        return "Pong! A API está funcionando corretamente!";
+    }
+
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterDto data) {
         if (this.repository.findByNome(data.nome()) != null) return ResponseEntity.badRequest().build();

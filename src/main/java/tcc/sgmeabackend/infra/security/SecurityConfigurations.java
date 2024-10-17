@@ -36,6 +36,7 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/api/sgmea/v1/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/sgmea/v1/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.GET, "api/sgmea/v1/auth/ping").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/sgmea/v1/users/reset-password").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/sgmea/v1/users/forgot-password").permitAll()
                         .requestMatchers(HttpMethod.GET, "/swagger-ui/**", "/v3/api-docs/**").permitAll()
@@ -67,6 +68,12 @@ public class SecurityConfigurations {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200")); // Origens permitidas
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT","PATCH", "DELETE")); // Métodos permitidos
+        configuration.setAllowedOrigins(Arrays.asList(
+                "http://localhost:4200",
+                "https://ec2-3-208-47-127.compute-1.amazonaws.com", // Mudando para HTTPS
+                "https://sgmea-tcc-frontend.vercel.app" // URL da Vercel já está com HTTPS
+        )); // Adicionando a URL da Vercel
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE")); // Métodos permitidos
         configuration.setAllowedHeaders(Arrays.asList("*")); // Cabeçalhos permitidos
         configuration.setAllowCredentials(true); // Permitir credenciais
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
