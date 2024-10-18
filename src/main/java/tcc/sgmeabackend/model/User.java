@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
@@ -44,7 +43,6 @@ public class User implements UserDetails {
     @Email
     @NotNull(message = "O campo EMAIL é requerido")
     @Column(unique = true)
-    @NotEmpty
     private String email;
 
 

@@ -24,6 +24,7 @@ public class Tecnico extends User {
 
     private static final long serialVersionUID = 1L;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "tecnico_especialidade",
