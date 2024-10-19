@@ -1,20 +1,21 @@
 package tcc.sgmeabackend.controller;
 
 import jakarta.annotation.security.PermitAll;
+import jakarta.servlet.http.HttpServletResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 import tcc.sgmeabackend.model.Departamento;
 import tcc.sgmeabackend.model.Equipamento;
 import tcc.sgmeabackend.model.PageableResource;
 import tcc.sgmeabackend.model.dtos.EquipamentoResponse;
 import tcc.sgmeabackend.service.AbstractService;
+import tcc.sgmeabackend.service.exceptions.ObjectnotFoundException;
 import tcc.sgmeabackend.service.impl.EquipamentoServiceImpl;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @PermitAll
@@ -38,6 +39,29 @@ public class EquipamentoController extends AbstractController<Equipamento, Equip
         return service;
     }
 
+
+    @PostMapping("/inative/{id}")
+    public ResponseEntity inativeEquipamento(@PathVariable String id) {
+        if (id.isEmpty()) {
+            throw new ObjectnotFoundException("Equipamento não encontrado");
+        }
+        return ResponseEntity.ok(this.service.inativeEquipamento(id));
+    }
+
+    @GetMapping("/allEquipamentosActive")
+    public ResponseEntity<PageableResource<Equipamento>> allEquipamentosActive() {
+
+        final List records = service.findAllActive();
+        return ResponseEntity.ok(new PageableResource(records));
+    }
+
+    @GetMapping("/allEquipamentoIsNotActive")
+    public ResponseEntity<PageableResource<Equipamento>> allEquipamentosIsNotActive() {
+        final List records = service.findAllIsNotActive();
+        return ResponseEntity.ok(new PageableResource(records));
+    }
+
+
     @GetMapping("/list-advanced")
     public ResponseEntity<PageableResource<Equipamento>> listAdvanced(
             @RequestParam(name = "nome", required = false) String nome) {
@@ -50,7 +74,7 @@ public class EquipamentoController extends AbstractController<Equipamento, Equip
             list = this.service.findByNome(nome);
         } else {
             // Se o nome for nulo ou vazio, retorna todos os funcionários
-            list = this.service.findAll();
+            list = this.service.findAllActive();
         }
 
         return ResponseEntity.ok(new PageableResource<>(list));

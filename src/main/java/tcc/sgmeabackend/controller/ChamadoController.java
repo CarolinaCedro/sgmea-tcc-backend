@@ -108,7 +108,6 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
             @RequestParam(name = "titulo", required = false) String titulo) {
 
         List<Status> status = Arrays.asList(Status.ENCERRADO, Status.CONCLUIDO);
-        List<String> listStringStatus = Arrays.asList(Status.ENCERRADO.toString(), Status.CONCLUIDO.toString());
 
 
         List<ChamadoCriado> list;

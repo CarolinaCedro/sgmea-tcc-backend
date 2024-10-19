@@ -3,6 +3,7 @@ package tcc.sgmeabackend.service.impl;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import tcc.sgmeabackend.model.Equipamento;
+import tcc.sgmeabackend.model.PageableResource;
 import tcc.sgmeabackend.repository.EquipamentoRepository;
 import tcc.sgmeabackend.service.AbstractService;
 
@@ -49,7 +50,30 @@ public class EquipamentoServiceImpl extends AbstractService<Equipamento> {
 
     }
 
+
+    public List<Equipamento> findAllActive() {
+        return this.equipamentoRepository.findAllByEmUsoTrue();
+    }
+
+    public List<Equipamento> findAllIsNotActive() {
+        return this.equipamentoRepository.findAllByEmUsoFalse();
+    }
+
     public long countEquipamentos() {
         return this.equipamentoRepository.count();
+    }
+
+    public Equipamento inativeEquipamento(String id) {
+
+        Optional<Equipamento> equipamentoOptional = findById(id);
+
+        if (equipamentoOptional.isPresent()) {
+            Equipamento equipamento = equipamentoOptional.get();
+            equipamento.setEmUso(false);
+            return this.equipamentoRepository.save(equipamento);
+        }
+
+
+        return null;
     }
 }
