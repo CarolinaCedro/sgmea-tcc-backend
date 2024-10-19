@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -49,6 +50,7 @@ public class ChamadoCriado implements Serializable {
     @JsonDeserialize(using = EquipamentoDesserializer.class)
     private Equipamento equipamento;
 
+    @NotNull(message = "O campo titulo é requerido")
     private String titulo;
     private String observacaoConsolidacao;
     private String observacoes;

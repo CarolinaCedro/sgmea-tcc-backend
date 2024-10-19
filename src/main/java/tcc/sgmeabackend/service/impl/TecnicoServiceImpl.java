@@ -1,10 +1,17 @@
 package tcc.sgmeabackend.service.impl;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import tcc.sgmeabackend.model.Tecnico;
+import tcc.sgmeabackend.model.User;
 import tcc.sgmeabackend.repository.TecnicoRepository;
 import tcc.sgmeabackend.service.AbstractService;
+import tcc.sgmeabackend.service.exceptions.CpfAlocadoException;
+import tcc.sgmeabackend.service.exceptions.EmailAlocadoException;
+
+import java.util.List;
+import java.util.Optional;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,6 +47,25 @@ public class TecnicoServiceImpl extends AbstractService<Tecnico> {
     }
 
     @Override
+    public Tecnico create(Tecnico resource) {
+        Optional<User> existingUser = this.tecnicoRepository.findByEmail(resource.getEmail());
+        if (existingUser.isPresent()) {
+            throw new EmailAlocadoException("email já está alocado a outro usúario !");
+        }
+
+        Optional<User> existingUserForCpf = this.tecnicoRepository.findByCpf(resource.getCpf());
+        if (existingUserForCpf.isPresent()) {
+            throw new CpfAlocadoException("cpf já está alocado a outro usúario !");
+        }
+
+        try {
+            return super.create(resource);
+        } catch (DataIntegrityViolationException ex) {
+            throw new CpfAlocadoException("O CPF ou email informado já está em uso por outro usuário. Verifique os dados e tente novamente.");
+        }
+    }
+
+    @Override
     protected JpaRepository<Tecnico, String> getRepository() {
         return tecnicoRepository;
     }
@@ -49,7 +75,4 @@ public class TecnicoServiceImpl extends AbstractService<Tecnico> {
 
     }
 
-    public Tecnico findByEmail(String emailTecnicoLogado) {
-        return this.tecnicoRepository.findByEmail(emailTecnicoLogado);
-    }
 }

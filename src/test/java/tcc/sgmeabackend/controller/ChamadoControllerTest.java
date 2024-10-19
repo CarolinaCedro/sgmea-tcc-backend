@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import tcc.sgmeabackend.model.*;
 import tcc.sgmeabackend.model.dtos.ChamadoConsolidado;
 import tcc.sgmeabackend.repository.ChamadoAtribuidoRepository;
-import tcc.sgmeabackend.service.EmailService;
+import tcc.sgmeabackend.service.impl.EmailService;
 import tcc.sgmeabackend.service.impl.ChamadoServiceImpl;
 import tcc.sgmeabackend.service.impl.FuncionarioServiceImpl;
 import tcc.sgmeabackend.service.impl.GestorServiceImpl;

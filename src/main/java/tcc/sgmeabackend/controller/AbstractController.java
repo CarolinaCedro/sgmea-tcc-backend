@@ -9,18 +9,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tcc.sgmeabackend.model.Funcionario;
-import tcc.sgmeabackend.model.PageableResource;
-import tcc.sgmeabackend.service.AbstractService;
-
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
 public abstract class AbstractController<T, E> implements RestController<T, E> {
 
-    public final ModelMapper modelMapper;
 
     protected AbstractController(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
@@ -31,7 +25,7 @@ public abstract class AbstractController<T, E> implements RestController<T, E> {
     @Override
     @GetMapping
     public ResponseEntity<PageableResource<E>> list(HttpServletResponse response, Map<String, String> allRequestParams) {
-        return ResponseEntity.ok(toPageableResource( this.getService(),response, allRequestParams));
+        return ResponseEntity.ok(toPageableResource(this.getService(), response, allRequestParams));
     }
 
     @GetMapping("/pagination")
@@ -51,7 +45,6 @@ public abstract class AbstractController<T, E> implements RestController<T, E> {
 
         return ResponseEntity.ok(value);
     }
-
 
 
     @Override

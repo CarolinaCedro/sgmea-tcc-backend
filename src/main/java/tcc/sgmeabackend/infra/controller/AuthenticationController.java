@@ -21,6 +21,10 @@ import tcc.sgmeabackend.repository.FuncionarioRepository;
 import tcc.sgmeabackend.repository.GestorRepository;
 import tcc.sgmeabackend.repository.TecnicoRepository;
 import tcc.sgmeabackend.repository.UserRepository;
+import tcc.sgmeabackend.service.exceptions.CpfAlocadoException;
+import tcc.sgmeabackend.service.exceptions.EmailAlocadoException;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/sgmea/v1/auth")
@@ -63,15 +67,24 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterDto data) {
-        if (this.repository.findByNome(data.nome()) != null) return ResponseEntity.badRequest().build();
+    public ResponseEntity<?> register(@RequestBody @Valid RegisterDto data) {
+        Optional<User> existingUser = Optional.ofNullable(this.repository.findByEmail(data.email()));
+        if (existingUser.isPresent()) {
+            throw new EmailAlocadoException("email já está alocado a outro usúario !");
+        }
+
+        Optional<User> existingUserForCpf = this.repository.findByCpf(data.cpf());
+        if (existingUserForCpf.isPresent()) {
+            throw new CpfAlocadoException("cpf já está alocado a outro usúario !");
+        }
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.senha());
 
         User newUser = new User(null, data.nome(), data.cpf(), data.email(), encryptedPassword, data.role(), data.perfil());
-        System.out.println("user que vem pra salvar" + data);
+        System.out.println("Usuário que vem para salvar: " + newUser);
 
         try {
+            // Verificar o perfil e salvar o usuário nas respectivas tabelas
             if (data.perfil().equals(Perfil.FUNCIONARIO)) {
                 Funcionario funcionario = new Funcionario();
                 funcionario.setId(newUser.getId());
@@ -91,6 +104,7 @@ public class AuthenticationController {
                 gestor.setId(newUser.getId());
                 gestor.setNome(newUser.getNome());
                 gestor.setEmail(newUser.getEmail());
+                gestor.setCpf(newUser.getCpf());
                 gestor.setSenha(newUser.getSenha());
                 gestor.setAreaGestao(null);
                 gestor.setUsuariosAlocados(null);
@@ -116,17 +130,17 @@ public class AuthenticationController {
                 this.repository.save(newUser);
             }
 
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok().body("Usuário registrado com sucesso!");
 
         } catch (MailSendException e) {
             // Captura de exceção no envio do e-mail
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao enviar o e-mail: " + e.getMessage());
         } catch (Exception e) {
+            // Captura de qualquer outro erro inesperado
             e.printStackTrace();
-            System.out.println("erroooooooooooooooooo" + e.getMessage());
-            return ResponseEntity.badRequest().build();
+            System.out.println("Erro inesperado: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao registrar o usuário: " + e.getMessage());
         }
-
     }
 
 
