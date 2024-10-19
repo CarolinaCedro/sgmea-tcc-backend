@@ -15,6 +15,7 @@ import java.util.Set;
 
 public abstract class AbstractController<T, E> implements RestController<T, E> {
 
+    public final ModelMapper modelMapper;
 
     protected AbstractController(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
