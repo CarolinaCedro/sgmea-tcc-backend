@@ -8,6 +8,8 @@ import tcc.sgmeabackend.model.User;
 import java.util.List;
 import java.util.Optional;
 
+import java.util.List;
+
 @Repository
 public interface FuncionarioRepository extends JpaRepository<Funcionario, String> {
     public List<Funcionario> findByNomeContainingIgnoreCase(String nome);

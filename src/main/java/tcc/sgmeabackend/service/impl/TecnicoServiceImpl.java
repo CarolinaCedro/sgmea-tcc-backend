@@ -13,6 +13,9 @@ import tcc.sgmeabackend.service.exceptions.EmailAlocadoException;
 import java.util.List;
 import java.util.Optional;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class TecnicoServiceImpl extends AbstractService<Tecnico> {
 

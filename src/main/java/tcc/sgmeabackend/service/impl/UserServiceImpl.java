@@ -16,6 +16,9 @@ import tcc.sgmeabackend.service.exceptions.UserNotFoundException;
 import java.util.Optional;
 import java.util.UUID;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @Service
 public class UserServiceImpl extends AbstractService<User> {
 

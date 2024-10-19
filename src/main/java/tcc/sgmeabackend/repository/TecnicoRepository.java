@@ -8,6 +8,8 @@ import tcc.sgmeabackend.model.User;
 import java.util.List;
 import java.util.Optional;
 
+import java.util.List;
+
 @Repository
 public interface TecnicoRepository extends JpaRepository<Tecnico, String> {
     List<Tecnico> findByNomeContainingIgnoreCase(String nome);

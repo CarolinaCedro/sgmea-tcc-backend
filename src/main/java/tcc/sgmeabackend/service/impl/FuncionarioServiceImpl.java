@@ -14,6 +14,9 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class FuncionarioServiceImpl extends AbstractService<Funcionario> {
 
@@ -69,9 +72,5 @@ public class FuncionarioServiceImpl extends AbstractService<Funcionario> {
     @Override
     protected JpaRepository<Funcionario, String> getRepository() {
         return funcionarioRepository;
-    }
-
-    public List<Funcionario> findByNome(String nome) {
-        return this.funcionarioRepository.findByNomeContainingIgnoreCase(nome);
     }
 }

@@ -9,9 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tcc.sgmeabackend.model.PageableResource;
-import tcc.sgmeabackend.service.AbstractService;
-
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -73,7 +70,7 @@ public abstract class AbstractController<T, E> implements RestController<T, E> {
 
     @Override
     @PutMapping("/{id}")
-    public ResponseEntity<E> update(@PathVariable String id, @Valid @RequestBody T resource) {
+    public ResponseEntity<E> update(@PathVariable String id, @RequestBody T resource) {
         T updatedResource = this.getService().update(id, resource);
         E response = modelMapper.map(updatedResource, getDtoClass());
         return ResponseEntity.ok(response);
