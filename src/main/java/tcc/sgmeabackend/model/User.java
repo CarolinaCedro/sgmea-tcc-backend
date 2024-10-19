@@ -1,12 +1,11 @@
 package tcc.sgmeabackend.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
@@ -38,8 +37,12 @@ public class User implements UserDetails {
     private String nome;
 
     @Column(unique = true)
+    @NotNull(message = "O campo cpf é requerido")
     private String cpf;
 
+    @Email
+    @NotNull(message = "O campo EMAIL é requerido")
+    @Column(unique = true)
     private String email;
 
 

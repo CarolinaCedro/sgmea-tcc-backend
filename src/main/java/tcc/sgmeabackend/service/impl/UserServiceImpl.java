@@ -9,6 +9,9 @@ import tcc.sgmeabackend.model.UpdateUser;
 import tcc.sgmeabackend.model.User;
 import tcc.sgmeabackend.repository.UserRepository;
 import tcc.sgmeabackend.service.AbstractService;
+import tcc.sgmeabackend.service.exceptions.CpfAlocadoException;
+import tcc.sgmeabackend.service.exceptions.EmailAlocadoException;
+import tcc.sgmeabackend.service.exceptions.UserNotFoundException;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -23,6 +26,26 @@ public class UserServiceImpl extends AbstractService<User> {
     public UserServiceImpl(UserRepository userRepository, JavaMailSender mailSender) {
         this.userRepository = userRepository;
         this.mailSender = mailSender;
+    }
+
+
+    @Override
+    public User create(User resource) {
+        // Verificar se o email já está cadastrado usando Optional para evitar checagem explícita de null
+        Optional<User> existingUser = Optional.ofNullable(this.userRepository.findByEmail(resource.getEmail()));
+        Optional<User> existingUserForCpf = this.userRepository.findByCpf(resource.getCpf());
+
+        if (existingUser.isPresent()) {
+            // Exceção personalizada com mensagem detalhada
+            throw new EmailAlocadoException("O email " + resource.getEmail() + " já está cadastrado no sistema. Por favor, use um email diferente.");
+        }
+
+        if (existingUserForCpf.isPresent()) {
+            throw new CpfAlocadoException("O cpf " + resource.getCpf() + " já está cadastrado no sistema. Por favor, use um cpf diferente.");
+        }
+
+        // Se o email não existe, criar o usuário
+        return super.create(resource);
     }
 
 
@@ -48,8 +71,9 @@ public class UserServiceImpl extends AbstractService<User> {
                     "http://localhost:4200/reset-password?token=" + token);
 
             mailSender.send(mailMessage);
+        } else {
+            throw new UserNotFoundException("Usuário solicitado não foi encontrado no sistema. Verifique as informações e tente novamente.");
         }
-        // Não há resposta de erro se o email não for encontrado
     }
 
 

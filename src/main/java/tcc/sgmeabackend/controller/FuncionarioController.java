@@ -3,8 +3,8 @@ package tcc.sgmeabackend.controller;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tcc.sgmeabackend.model.Funcionario;
 import tcc.sgmeabackend.model.PageableResource;
 import tcc.sgmeabackend.service.AbstractService;
@@ -48,6 +48,9 @@ public class FuncionarioController extends AbstractController<Funcionario, Funci
         return super.create(resource);
     }
 
+
+
+
     @GetMapping("/list-advanced")
     public ResponseEntity<PageableResource<Funcionario>> listAdvanced(
             @RequestParam(name = "nome", required = false) String nome) {
@@ -65,7 +68,6 @@ public class FuncionarioController extends AbstractController<Funcionario, Funci
 
         return ResponseEntity.ok(new PageableResource<>(list));
     }
-
 
 
 }

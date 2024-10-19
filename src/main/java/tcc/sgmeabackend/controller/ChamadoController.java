@@ -4,18 +4,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 import tcc.sgmeabackend.model.*;
 import tcc.sgmeabackend.model.dtos.ChamadoConsolidado;
 import tcc.sgmeabackend.model.enums.Status;
 import tcc.sgmeabackend.repository.ChamadoAtribuidoRepository;
-import tcc.sgmeabackend.repository.TecnicoRepository;
 import tcc.sgmeabackend.service.AbstractService;
-import tcc.sgmeabackend.service.EmailService;
+import tcc.sgmeabackend.service.impl.EmailService;
 import tcc.sgmeabackend.service.exceptions.ResourceNotFoundException;
 import tcc.sgmeabackend.service.impl.ChamadoServiceImpl;
 import tcc.sgmeabackend.service.impl.FuncionarioServiceImpl;
@@ -112,7 +108,6 @@ public class ChamadoController extends AbstractController<ChamadoCriado, Chamado
             @RequestParam(name = "titulo", required = false) String titulo) {
 
         List<Status> status = Arrays.asList(Status.ENCERRADO, Status.CONCLUIDO);
-        List<String> listStringStatus = Arrays.asList(Status.ENCERRADO.toString(), Status.CONCLUIDO.toString());
 
 
         List<ChamadoCriado> list;

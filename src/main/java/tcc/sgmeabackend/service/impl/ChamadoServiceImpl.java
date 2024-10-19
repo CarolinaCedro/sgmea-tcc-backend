@@ -17,7 +17,6 @@ import tcc.sgmeabackend.repository.ChamadoCriadoRepository;
 import tcc.sgmeabackend.repository.GestorRepository;
 import tcc.sgmeabackend.repository.TecnicoRepository;
 import tcc.sgmeabackend.service.AbstractService;
-import tcc.sgmeabackend.service.EmailService;
 
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;

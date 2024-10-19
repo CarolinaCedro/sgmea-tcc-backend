@@ -43,8 +43,15 @@ public class ResourceExceptionHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<StandardError> handleDataIntegrityViolationException(DataIntegrityViolationException ex, HttpServletRequest request) {
+        String message = "Violação de integridade de dados";
+
+        // Verifica se a exceção é devido a uma duplicação de chave única
+        if (ex.getMessage().contains("Duplicate entry")) {
+            message = "Já existe um usuário com este CPF ou email. Por favor, use valores diferentes.";
+        }
+
         StandardError error = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(),
-                "Violação de integridade de dados", ex.getMessage(), request.getRequestURI());
+                message, ex.getMessage(), request.getRequestURI());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
