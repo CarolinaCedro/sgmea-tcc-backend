@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface FuncionarioRepository extends JpaRepository<Funcionario, String> {
-    public List<Funcionario> findByNomeContainingIgnoreCase(String nome);
+     List<Funcionario> findByNomeContainingIgnoreCase(String nome);
 
     Optional<User> findByEmail(String email);
 

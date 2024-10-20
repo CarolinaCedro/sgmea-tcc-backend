@@ -9,6 +9,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tcc.sgmeabackend.model.PageableResource;
+import tcc.sgmeabackend.service.AbstractService;
+
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;

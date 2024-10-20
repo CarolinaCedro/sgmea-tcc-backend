@@ -4,6 +4,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import tcc.sgmeabackend.model.Funcionario;
+import tcc.sgmeabackend.model.Gestor;
 import tcc.sgmeabackend.model.User;
 import tcc.sgmeabackend.repository.FuncionarioRepository;
 import tcc.sgmeabackend.service.AbstractService;
@@ -73,4 +74,9 @@ public class FuncionarioServiceImpl extends AbstractService<Funcionario> {
     protected JpaRepository<Funcionario, String> getRepository() {
         return funcionarioRepository;
     }
+
+    public List<Funcionario> findByNome(String nome) {
+        return this.funcionarioRepository.findByNomeContainingIgnoreCase(nome);
+    }
+
 }
