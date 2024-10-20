@@ -1,5 +1,7 @@
 tcc/sgmeabackend/model/jackson/desserializer/ChamadoAtribuidoDesserializer.class
 tcc/sgmeabackend/service/impl/EquipamentoServiceImpl.class
+tcc/sgmeabackend/service/impl/EmailService.class
+tcc/sgmeabackend/service/exceptions/UserNotFoundException.class
 tcc/sgmeabackend/model/jackson/desserializer/FuncionarioDesserializer.class
 tcc/sgmeabackend/service/impl/ChamadoServiceImpl.class
 tcc/sgmeabackend/model/dtos/DepartamentoResponse.class
@@ -18,6 +20,7 @@ tcc/sgmeabackend/model/enums/Operator$3.class
 tcc/sgmeabackend/model/enums/AreaGestao.class
 tcc/sgmeabackend/service/AbstractService.class
 tcc/sgmeabackend/controller/EmailController.class
+tcc/sgmeabackend/config/MailConfig.class
 tcc/sgmeabackend/model/UpdateUser.class
 tcc/sgmeabackend/service/Rest.class
 tcc/sgmeabackend/model/dtos/ChamadoAtribuidoDto.class
@@ -38,6 +41,7 @@ tcc/sgmeabackend/model/jackson/desserializer/EquipamentoDesserializer.class
 tcc/sgmeabackend/notifications/model/EmailDto.class
 tcc/sgmeabackend/model/dtos/EquipamentoResponse.class
 tcc/sgmeabackend/controller/ChamadoController.class
+tcc/sgmeabackend/service/exceptions/CpfAlocadoException.class
 tcc/sgmeabackend/model/dtos/ChamadoConsolidado.class
 tcc/sgmeabackend/model/PageableResource.class
 tcc/sgmeabackend/model/User.class
@@ -59,6 +63,7 @@ tcc/sgmeabackend/model/enums/Operator$4.class
 tcc/sgmeabackend/service/exceptions/ResourceExceptionHandler.class
 tcc/sgmeabackend/model/Especialidade.class
 tcc/sgmeabackend/repository/GestorRepository.class
+tcc/sgmeabackend/service/exceptions/EmailAlocadoException.class
 tcc/sgmeabackend/service/impl/GestorServiceImpl.class
 tcc/sgmeabackend/model/ChamadoReportResponse.class
 tcc/sgmeabackend/model/enums/Status.class
@@ -85,7 +90,6 @@ tcc/sgmeabackend/model/dtos/RegisterDto.class
 tcc/sgmeabackend/model/Departamento.class
 tcc/sgmeabackend/service/impl/UserServiceImpl.class
 tcc/sgmeabackend/model/dtos/AuthenticationDto.class
-tcc/sgmeabackend/service/EmailService.class
 tcc/sgmeabackend/model/LinkUtil.class
 tcc/sgmeabackend/controller/GestorController.class
 tcc/sgmeabackend/model/dtos/UserResponseDto.class
