@@ -67,6 +67,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> register(@RequestBody @Valid RegisterDto data) {
         Optional<User> existingUser = Optional.ofNullable(this.repository.findByEmail(data.email()));
         if (existingUser.isPresent()) {
@@ -84,57 +85,25 @@ public class AuthenticationController {
         System.out.println("Usuário que vem para salvar: " + newUser);
 
         try {
-            // Verificar o perfil e salvar o usuário nas respectivas tabelas
-            if (data.perfil().equals(Perfil.FUNCIONARIO)) {
-                Funcionario funcionario = new Funcionario();
-                funcionario.setId(newUser.getId());
-                funcionario.setNome(newUser.getNome());
-                funcionario.setEmail(newUser.getEmail());
-                funcionario.setSenha(newUser.getSenha());
-                funcionario.setGestor(newUser.getGestor());
-                funcionario.setDepartamento(null);
-                funcionario.setChamadoCriados(null);
-                funcionario.setFuncao("Não foi informado");
-                funcionario.setRole(newUser.getRole());
-                funcionario.setPerfil(newUser.getPerfil());
-                this.funcionarioRepository.save(funcionario);
+            Gestor gestor = new Gestor();
+            gestor.setId(newUser.getId());
+            gestor.setNome(newUser.getNome());
+            gestor.setEmail(newUser.getEmail());
+            gestor.setCpf(newUser.getCpf());
+            gestor.setSenha(newUser.getSenha());
+            gestor.setAreaGestao(null);
+            gestor.setUsuariosAlocados(null);
+            gestor.setChamadoAtribuidos(null);
+            gestor.setRole(newUser.getRole());
+            gestor.setPerfil(newUser.getPerfil());
+            this.gestorRepository.save(gestor);
 
-            } else if (data.perfil().equals(Perfil.GESTOR)) {
-                Gestor gestor = new Gestor();
-                gestor.setId(newUser.getId());
-                gestor.setNome(newUser.getNome());
-                gestor.setEmail(newUser.getEmail());
-                gestor.setCpf(newUser.getCpf());
-                gestor.setSenha(newUser.getSenha());
-                gestor.setAreaGestao(null);
-                gestor.setUsuariosAlocados(null);
-                gestor.setChamadoAtribuidos(null);
-                gestor.setRole(newUser.getRole());
-                gestor.setPerfil(newUser.getPerfil());
-                this.gestorRepository.save(gestor);
+//            this.repository.save(newUser);
 
-            } else if (data.perfil().equals(Perfil.TECNICO)) {
-                Tecnico tecnico = new Tecnico();
-                tecnico.setId(newUser.getId());
-                tecnico.setNome(newUser.getNome());
-                tecnico.setEmail(newUser.getEmail());
-                tecnico.setSenha(newUser.getSenha());
-                tecnico.setGestor(newUser.getGestor());
-                tecnico.setChamadoAtribuidos(null);
-                tecnico.setDisponibilidade(true);
-                tecnico.setRole(newUser.getRole());
-                tecnico.setPerfil(newUser.getPerfil());
-                this.tecnicoRepository.save(tecnico);
 
-            } else {
-                this.repository.save(newUser);
-            }
+            return ResponseEntity.ok().body(gestor);
 
-            return ResponseEntity.ok().body("Usuário registrado com sucesso!");
 
-        } catch (MailSendException e) {
-            // Captura de exceção no envio do e-mail
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao enviar o e-mail: " + e.getMessage());
         } catch (Exception e) {
             // Captura de qualquer outro erro inesperado
             e.printStackTrace();
