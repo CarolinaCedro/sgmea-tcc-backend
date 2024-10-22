@@ -23,6 +23,7 @@ public class Equipamento {
     @NotNull(message = "O campo nome é requerido")
     private String nome;
     private String descricao;
+    @NotNull(message = "O campo patrimonio é requerido")
     private String patrimonio;
     @NotNull(message = "O campo nome do fabricante é requerido")
     private String fabricante;
