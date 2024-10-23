@@ -27,8 +27,8 @@ public class Gestor extends User {
 
     private static final long serialVersionUID = 1L;
 
-    @Enumerated(EnumType.STRING)
-    private AreaGestao areaGestao;
+//    @Enumerated(EnumType.STRING)
+    private String areaGestao;
 
     @JsonIgnore
     @OneToMany(mappedBy = "gestor", fetch = FetchType.EAGER)
@@ -40,7 +40,7 @@ public class Gestor extends User {
     @OneToMany(mappedBy = "gestor", fetch = FetchType.LAZY)
     private List<User> usuariosAlocados = new ArrayList<>();
 
-    public Gestor(String id, @NotNull(message = "O campo NOME é requerido") String nome, String cpf, String email, String resetToken, LocalDateTime resetTokenExpiryDate, Gestor gestor, Perfil perfil, String senha, UserRole role, AreaGestao areaGestao, List<ChamadoAtribuido> chamadoAtribuidos, List<User> usuariosAlocados) {
+    public Gestor(String id, @NotNull(message = "O campo NOME é requerido") String nome, String cpf, String email, String resetToken, LocalDateTime resetTokenExpiryDate, Gestor gestor, Perfil perfil, String senha, UserRole role, String areaGestao, List<ChamadoAtribuido> chamadoAtribuidos, List<User> usuariosAlocados) {
         super(id, nome, cpf, email, resetToken, resetTokenExpiryDate, gestor, perfil, senha, role);
         this.areaGestao = areaGestao;
         this.chamadoAtribuidos = chamadoAtribuidos;
