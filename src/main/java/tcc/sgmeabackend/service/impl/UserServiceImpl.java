@@ -71,7 +71,7 @@ public class UserServiceImpl extends AbstractService<User> {
             mailMessage.setTo(user.getEmail());
             mailMessage.setSubject("Recuperação de Senha");
             mailMessage.setText("Para redefinir sua senha, clique no link abaixo:\n" +
-                    "http://localhost:4200/reset-password?token=" + token);
+                    "https://sgmea-tcc-frontend.vercel.app/reset-password?token=" + token);
 
             mailSender.send(mailMessage);
         } else {
